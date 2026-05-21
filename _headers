@@ -1,0 +1,34 @@
+# Netlify / Cloudflare Pages / Vercel Edge headers
+# Ensures Lighthouse audit "Use efficient cache lifetimes" passes
+# even before the service worker is warm.
+
+# ── Immutable assets (hashed or versioned filenames) ──────────────
+/assets/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/sounds/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/splash/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/screenshots/*
+  Cache-Control: public, max-age=2592000, immutable
+
+# ── JS / CSS (stale-while-revalidate, bump version in SW CACHE_VER) ──
+/*.js
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.css
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# ── HTML documents (always revalidate) ───────────────────────────
+/*.html
+  Cache-Control: no-cache, must-revalidate
+
+/
+  Cache-Control: no-cache, must-revalidate
+
+# ── Manifest ─────────────────────────────────────────────────────
+/manifest.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600

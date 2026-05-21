@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>VEERFLOW — You're Offline</title>
+  <meta name="theme-color" content="#0b1120"/>
+  <style>
+    :root {
+      --bg:      #060a14;
+      --surface: #0b1220;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #eef2ff;
+      --muted:   #8899bb;
+      --accent:  #4f9cf9;
+      --accent-glow: rgba(79,156,249,0.3);
+      --success: #34d399;
+      --radius:  18px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    /* Animated background blobs */
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; z-index: 0; animation: float 12s ease-in-out infinite;
+    }
+    .blob-1 { width: 300px; height: 300px; top: -80px; left: -60px; background: rgba(79,156,249,.07); }
+    .blob-2 { width: 250px; height: 250px; bottom: -60px; right: -50px; background: rgba(123,94,167,.07); animation-delay: -5s; }
+    @keyframes float {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(20px,-18px) scale(1.04); }
+      66% { transform: translate(-14px,22px) scale(.97); }
+    }
+
+    main {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; padding: 24px 20px 32px;
+      width: 100%; max-width: 380px;
+      text-align: center;
+    }
+
+    /* Brand */
+    .brand {
+      font-size: 13px; font-weight: 800; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 32px; opacity: .75;
+    }
+
+    /* Offline icon — animated pulse ring */
+    .offline-icon-wrap {
+      position: relative; width: 90px; height: 90px;
+      display: grid; place-items: center; margin-bottom: 28px;
+    }
+    .offline-ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 1.5px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .offline-ring:nth-child(2) { animation-delay: .9s; inset: -10px; border-color: color-mix(in srgb, var(--accent) 14%, transparent); }
+    .offline-ring:nth-child(3) { animation-delay: 1.8s; inset: -20px; border-color: color-mix(in srgb, var(--accent) 7%, transparent); }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.08)} }
+    .offline-emoji {
+      font-size: 36px; position: relative; z-index: 1;
+      filter: grayscale(.3);
+    }
+
+    h1 {
+      font-size: 22px; font-weight: 800; letter-spacing: -.02em;
+      line-height: 1.2; margin-bottom: 10px;
+      background: linear-gradient(120deg, var(--text) 35%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    p {
+      font-size: 14px; color: var(--muted); line-height: 1.6;
+      margin-bottom: 28px; max-width: 280px;
+    }
+
+    /* Cached data card */
+    .cache-card {
+      width: 100%; background: rgba(11,18,32,.85);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 20px; margin-bottom: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4), inset 0 1px rgba(255,255,255,.05);
+    }
+    .cache-card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 14px; text-align: left;
+    }
+    .stat-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .stat-cell {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 8px; text-align: center;
+    }
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px; font-weight: 700; display: block; line-height: 1;
+      background: linear-gradient(120deg, var(--text) 25%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 10px; color: var(--muted); margin-top: 3px; display: block; }
+
+    /* Motivational line */
+    .quote {
+      font-size: 13px; font-style: italic; color: var(--muted);
+      line-height: 1.55; margin-bottom: 28px; padding: 0 8px;
+    }
+    .quote::before { content: "\201C"; }
+    .quote::after  { content: "\201D"; }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%; padding: 14px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #7b5ea7);
+      border: none; color: #fff; font-size: 15px; font-weight: 700;
+      letter-spacing: .04em; cursor: pointer;
+      box-shadow: 0 8px 28px var(--accent-glow);
+      transition: transform .2s, box-shadow .2s;
+      margin-bottom: 10px;
+    }
+    .btn-primary:hover  { transform: translateY(-2px); box-shadow: 0 12px 36px var(--accent-glow); }
+    .btn-primary:active { transform: scale(.98); }
+
+    .btn-secondary {
+      width: 100%; padding: 12px; border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border); color: var(--muted);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: background .18s, color .18s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.09); color: var(--text); }
+
+    /* Status line */
+    .status-line {
+      margin-top: 24px; font-size: 11px; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #f87171;
+      box-shadow: 0 0 6px rgba(248,113,113,.5);
+      animation: blink 2s ease-in-out infinite;
+    }
+    .status-dot.online { background: var(--success); box-shadow: 0 0 6px rgba(52,211,153,.5); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<main>
+  <div class="brand">VEERFLOW</div>
+
+  <div class="offline-icon-wrap">
+    <div class="offline-ring"></div>
+    <div class="offline-ring"></div>
+    <div class="offline-ring"></div>
+    <span class="offline-emoji">📡</span>
+  </div>
+
+  <h1>You're offline</h1>
+  <p>No internet right now — but your data is safe. Reconnect to sync and continue your focus journey.</p>
+
+  <!-- Cached stats pulled from localStorage -->
+  <div class="cache-card" id="cacheCard" style="display:none">
+    <div class="cache-card-label">📦 Your progress — cached locally</div>
+    <div class="stat-row">
+      <div class="stat-cell"><span class="stat-val" id="offlineStreak">0</span><span class="stat-label">day streak</span></div>
+      <div class="stat-cell"><span class="stat-val" id="offlineSess">0</span><span class="stat-label">sessions today</span></div>
+      <div class="stat-cell"><span class="stat-val" id="offlineXp">0</span><span class="stat-label">total XP</span></div>
+      <div class="stat-cell"><span class="stat-val" id="offlineTasks">0</span><span class="stat-label">active tasks</span></div>
+    </div>
+  </div>
+
+  <p class="quote" id="offlineQuote">Discipline isn't built in perfect conditions. It's built despite imperfect ones.</p>
+
+  <button class="btn-primary" onclick="tryReload()">Try again</button>
+  <button class="btn-secondary" onclick="openCached()">Open cached app</button>
+
+  <div class="status-line">
+    <span class="status-dot" id="statusDot"></span>
+    <span id="statusText">No connection detected</span>
+  </div>
+</main>
+
+<script>
+  const OFFLINE_QUOTES = [
+    "Discipline isn't built in perfect conditions. It's built despite imperfect ones.",
+    "The session you do offline still counts. It always did.",
+    "Your streak lives in your behavior, not your connection.",
+    "Focus doesn't need Wi-Fi. You do.",
+    "Every return — online or off — strengthens the habit.",
+    "The data syncs. The discipline you built doesn't unsync.",
+  ];
+
+  /* Show a random quote */
+  const quoteEl = document.getElementById("offlineQuote");
+  if (quoteEl) quoteEl.textContent = OFFLINE_QUOTES[Math.floor(Math.random() * OFFLINE_QUOTES.length)];
+
+  /* Pull stats from localStorage and display them */
+  try {
+    const stats    = JSON.parse(localStorage.getItem("stats") || "{}");
+    const streak   = Number(localStorage.getItem("streak") || 0);
+    const xp       = Number(localStorage.getItem("xp") || 0);
+    const tasks    = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const today    = new Date().toDateString();
+    const todaySess = stats[today]?.sess || 0;
+    const activeTasks = tasks.filter(t => t.done < t.sessions).length;
+
+    if (streak > 0 || todaySess > 0 || xp > 0) {
+      document.getElementById("offlineStreak").textContent = streak;
+      document.getElementById("offlineSess").textContent   = todaySess;
+      document.getElementById("offlineXp").textContent     = xp;
+      document.getElementById("offlineTasks").textContent  = activeTasks;
+      document.getElementById("cacheCard").style.display   = "";
+    }
+  } catch(e) { /* localStorage not available */ }
+
+  /* Connection monitoring */
+  const dot  = document.getElementById("statusDot");
+  const txt  = document.getElementById("statusText");
+
+  function updateStatus() {
+    if (navigator.onLine) {
+      dot.classList.add("online");
+      txt.textContent = "Connection restored — reloading…";
+      setTimeout(() => window.location.replace("/"), 1200);
+    } else {
+      dot.classList.remove("online");
+      txt.textContent = "No connection detected";
+    }
+  }
+
+  window.addEventListener("online",  updateStatus);
+  window.addEventListener("offline", updateStatus);
+  updateStatus();
+
+  function tryReload() {
+    if (navigator.onLine) { window.location.replace("/"); return; }
+    txt.textContent = "Still offline — try again in a moment";
+    setTimeout(() => { txt.textContent = "No connection detected"; }, 3000);
+  }
+
+  function openCached() {
+    /* Try to open the cached version through the service worker */
+    window.location.href = "/index.html";
+  }
+</script>
+</body>
+</html>

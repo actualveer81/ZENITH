@@ -1,0 +1,291 @@
+/* ═══════════════════════════════════════════════════════════════
+   ZENITH — Feature #17 + #18 Styles
+   Covers: Notification toasts + settings UI · Auto-updater banner
+   Add: <link rel="stylesheet" href="phase56.css"> in <head>
+═══════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════
+   #17  IN-APP NOTIFICATION TOASTS
+════════════════════════════════════════════ */
+
+.zn-toast {
+  position:       fixed;
+  bottom:         24px;
+  right:          24px;
+  z-index:        88888;
+  display:        flex;
+  align-items:    center;
+  gap:            12px;
+  min-width:      280px;
+  max-width:      380px;
+  background:     rgba(14, 22, 44, 0.96);
+  border:         1px solid rgba(255,255,255,0.08);
+  border-radius:  14px;
+  padding:        12px 14px;
+  box-shadow:     0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  transform:      translateY(20px);
+  opacity:        0;
+  transition:     transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.3s ease;
+  font-family:    var(--font-body, "DM Sans", sans-serif);
+}
+.zn-toast-in  { transform: translateY(0); opacity: 1; }
+.zn-toast-out { transform: translateY(12px); opacity: 0; }
+
+.zn-toast-low    { border-left: 2px solid rgba(0,229,192,0.4); }
+.zn-toast-normal { border-left: 2px solid rgba(79,156,249,0.6); }
+.zn-toast-high   { border-left: 2px solid rgba(245,158,11,0.8); }
+
+.zn-toast-body   { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.zn-toast-title  { font-size: 13px; font-weight: 600; color: var(--text-primary, #fff); }
+.zn-toast-msg    { font-size: 12px; color: var(--muted, #888); line-height: 1.5; }
+.zn-toast-close  {
+  background:    none;
+  border:        none;
+  color:         var(--muted, #888);
+  font-size:     13px;
+  cursor:        pointer;
+  padding:       2px 4px;
+  border-radius: 4px;
+  flex-shrink:   0;
+  transition:    color 0.15s;
+}
+.zn-toast-close:hover { color: var(--text-primary, #fff); }
+
+
+/* ── Notification Settings Card (injected into settings modal) ── */
+.zn-settings-section {
+  margin-top:    20px;
+  padding-top:   16px;
+  border-top:    1px solid var(--card-border, rgba(255,255,255,0.07));
+}
+.zn-settings-heading {
+  font-size:   13px;
+  font-weight: 600;
+  margin:      0 0 14px;
+  color:       var(--text-primary, #fff);
+}
+
+.zn-setting-row {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  gap:             12px;
+  padding:         8px 0;
+  border-bottom:   1px solid rgba(255,255,255,0.04);
+}
+.zn-setting-row:last-child { border-bottom: none; }
+
+.zn-setting-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.zn-setting-label { font-size: 13px; font-weight: 500; }
+.zn-setting-desc  { font-size: 11px; color: var(--muted, #888); line-height: 1.5; }
+
+.zn-select {
+  background:    rgba(255,255,255,0.05);
+  border:        1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color:         var(--text-primary, #fff);
+  font-size:     12px;
+  padding:       5px 10px;
+  cursor:        pointer;
+  outline:       none;
+  transition:    border-color 0.2s;
+}
+.zn-select:focus { border-color: var(--accent, #00e5c0); }
+
+.zn-quiet-row { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.zn-quiet-to  { font-size: 11px; color: var(--muted, #888); }
+
+.zn-test-btn {
+  width:         100%;
+  margin-top:    12px;
+  font-size:     12px;
+  padding:       8px;
+  border-radius: 8px;
+  background:    rgba(0,229,192,0.06);
+  border:        1px solid rgba(0,229,192,0.2);
+  color:         var(--accent, #00e5c0);
+  cursor:        pointer;
+  transition:    all 0.2s;
+  font-family:   var(--font-body, sans-serif);
+}
+.zn-test-btn:hover {
+  background: rgba(0,229,192,0.12);
+  border-color: rgba(0,229,192,0.4);
+}
+
+
+/* ════════════════════════════════════════════
+   #18  AUTO-UPDATER BANNER
+   Fixed at top of viewport, slides down.
+════════════════════════════════════════════ */
+
+.znu-banner {
+  position:       fixed;
+  top:            0; left: 0; right: 0;
+  z-index:        99990;
+  background:     rgba(8, 15, 32, 0.97);
+  border-bottom:  1px solid rgba(255,255,255,0.07);
+  transform:      translateY(-100%);
+  transition:     transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  backdrop-filter: blur(20px);
+  font-family:    var(--font-body, "DM Sans", sans-serif);
+}
+.znu-banner.znu-visible { transform: translateY(0); }
+.znu-banner.znu-hiding  { transform: translateY(-100%); transition-timing-function: ease-in; }
+
+/* Left accent strip by state */
+.znu-state-downloading { border-bottom-color: rgba(79,156,249,0.3); }
+.znu-state-ready       { border-bottom-color: rgba(0,229,192,0.4); }
+.znu-state-error       { border-bottom-color: rgba(248,113,113,0.4); }
+
+.znu-inner {
+  display:     flex;
+  align-items: center;
+  gap:         14px;
+  max-width:   900px;
+  margin:      0 auto;
+  padding:     10px 20px;
+}
+
+/* Icon */
+.znu-icon-wrap {
+  flex-shrink: 0;
+  width:       32px;
+  height:      32px;
+  border-radius: 8px;
+  background:  rgba(255,255,255,0.05);
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+  transition:  background 0.3s;
+}
+.znu-icon-download  { background: rgba(79,156,249,0.1); }
+.znu-icon-ready     { background: rgba(0,229,192,0.1);  }
+.znu-icon-error     { background: rgba(248,113,113,0.1); }
+.znu-icon-installing { background: rgba(245,158,11,0.1); }
+
+.znu-icon {
+  width:  16px;
+  height: 16px;
+  color:  var(--muted, #888);
+}
+.znu-icon-download  .znu-icon { color: #4f9cf9;  animation: znu-spin 1.5s linear infinite; }
+.znu-icon-ready     .znu-icon { color: #00e5c0;  }
+.znu-icon-error     .znu-icon { color: #f87171;  }
+.znu-icon-installing .znu-icon { color: #f59e0b; animation: znu-spin 0.8s linear infinite; }
+
+@keyframes znu-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Text */
+.znu-text {
+  flex:           1;
+  display:        flex;
+  flex-direction: column;
+  gap:            1px;
+  min-width:      0;
+}
+.znu-title {
+  font-size:   13px;
+  font-weight: 600;
+  color:       var(--text-primary, #fff);
+  white-space: nowrap;
+  overflow:    hidden;
+  text-overflow: ellipsis;
+}
+.znu-sub {
+  font-size: 11px;
+  color:     var(--muted, #888);
+  white-space: nowrap;
+  overflow:  hidden;
+  text-overflow: ellipsis;
+}
+
+/* Progress bar */
+.znu-progress-wrap {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  flex-shrink: 0;
+  width:       140px;
+}
+.znu-progress-track {
+  flex:          1;
+  height:        4px;
+  background:    rgba(255,255,255,0.08);
+  border-radius: 100px;
+  overflow:      hidden;
+}
+.znu-progress-fill {
+  height:        100%;
+  background:    #4f9cf9;
+  border-radius: 100px;
+  transition:    width 0.4s ease;
+}
+.znu-progress-pct {
+  font-family: var(--font-mono, monospace);
+  font-size:   11px;
+  color:       var(--muted, #888);
+  min-width:   32px;
+  text-align:  right;
+}
+
+/* Action buttons */
+.znu-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.znu-btn {
+  font-size:    12px;
+  font-weight:  500;
+  padding:      6px 14px;
+  border-radius: 8px;
+  cursor:       pointer;
+  transition:   all 0.2s ease;
+  border:       1px solid transparent;
+  font-family:  var(--font-body, sans-serif);
+  white-space:  nowrap;
+}
+.znu-btn-primary {
+  background:   var(--accent, #00e5c0);
+  color:        #000;
+  border-color: var(--accent, #00e5c0);
+}
+.znu-btn-primary:hover { filter: brightness(1.1); }
+
+.znu-btn-ghost {
+  background:   rgba(255,255,255,0.05);
+  color:        var(--muted, #888);
+  border-color: rgba(255,255,255,0.1);
+}
+.znu-btn-ghost:hover { color: var(--text-primary, #fff); border-color: rgba(255,255,255,0.2); }
+
+/* Close */
+.znu-close {
+  flex-shrink:   0;
+  background:    none;
+  border:        none;
+  color:         var(--muted, #888);
+  font-size:     14px;
+  cursor:        pointer;
+  padding:       4px 6px;
+  border-radius: 6px;
+  transition:    color 0.15s;
+}
+.znu-close:hover { color: var(--text-primary, #fff); }
+
+/* If Electron titlebar is present — push banner below it */
+body.is-electron .znu-banner { top: 32px; }
+
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .zn-toast { right: 12px; left: 12px; min-width: unset; }
+  .znu-inner { padding: 8px 14px; gap: 10px; }
+  .znu-progress-wrap { width: 90px; }
+  .znu-title { font-size: 12px; }
+  .znu-btn   { padding: 5px 10px; font-size: 11px; }
+}

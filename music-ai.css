@@ -1,0 +1,155 @@
+/* ═══════════════════════════════════════════════════════════════
+   ZENITH — Focus Music AI Styles  (#19)
+   Append to app.css  OR  link as  <link rel="stylesheet" href="music-ai.css">
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Wrapper — sits where .ss-bar was ── */
+.mai-panel {
+  background:     color-mix(in srgb, var(--card) 70%, transparent);
+  border:         1px solid var(--card-border);
+  border-radius:  var(--radius-sm);
+  padding:        10px 12px 8px;
+  margin-top:  10px;
+  margin-bottom:  10px;
+}
+
+/* ── Header row ── */
+.mai-header {
+  display:        flex;
+  align-items:    center;
+  gap:            8px;
+  margin-bottom:  8px;
+}
+.mai-title {
+  font-size:      10px;
+  font-weight:    700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color:          var(--muted);
+  flex:           1;
+}
+.mai-title span {
+  background:     color-mix(in srgb, var(--accent) 14%, transparent);
+  border:         1px solid rgba(var(--accent-rgb), .2);
+  color:          var(--accent);
+  font-size:      8px;
+  font-weight:    700;
+  letter-spacing: .1em;
+  border-radius:  999px;
+  padding:        1px 6px;
+  margin-left:    6px;
+  vertical-align: middle;
+}
+
+/* ── Status line ── */
+.mai-status {
+  font-size:    11px;
+  font-family:  var(--font-mono);
+  transition:   color .3s;
+}
+.mai-on  { color: var(--accent); }
+.mai-off { color: var(--muted); }
+
+/* ── Headphone hint note ── */
+.mai-headphone-note {
+  font-size:   10px;
+  color:       var(--muted);
+  text-align:  center;
+  margin:      -4px 0 8px;
+  opacity:     0.75;
+  font-style:  italic;
+}
+
+/* ── Generator buttons ── */
+.mai-buttons {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   5px;
+  margin-bottom:         8px;
+}
+@media (max-width: 600px) {
+  .mai-buttons { grid-template-columns: repeat(2, 1fr); }
+}
+
+.mai-btn {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            3px;
+  padding:        8px 4px;
+  border-radius:  var(--radius-sm);
+  border:         1px solid var(--card-border);
+  background:     transparent;
+  cursor:         pointer;
+  transition:     background .2s, border-color .2s, color .2s;
+  color:          var(--muted);
+  font-family:    var(--font-body);
+}
+.mai-btn:hover {
+  background:   color-mix(in srgb, var(--accent) 08%, transparent);
+  border-color: rgba(var(--accent-rgb), .25);
+  color:        var(--text);
+}
+.mai-btn.mai-active {
+  background:   color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: rgba(var(--accent-rgb), .4);
+  color:        var(--accent);
+}
+.mai-btn-icon { font-size: 16px; line-height: 1; }
+.mai-btn-label {
+  font-size:      9px;
+  font-weight:    700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-align:     center;
+}
+.mai-btn-sub {
+  font-size:  8px;
+  color:      var(--muted);
+  text-align: center;
+  line-height:1.2;
+}
+.mai-btn.mai-active .mai-btn-sub { color: color-mix(in srgb, var(--accent) 70%, var(--muted)); }
+
+/* ── Intensity bar ── */
+.mai-intensity {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  margin-top:  2px;
+}
+.mai-intensity-label {
+  font-size:  9px;
+  color:      var(--muted);
+  white-space:nowrap;
+}
+.mai-intensity-track {
+  flex:           1;
+  height:         4px;
+  background:     color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius:  999px;
+  overflow:       hidden;
+}
+.mai-intensity-fill {
+  height:         100%;
+  border-radius:  999px;
+  background:     linear-gradient(90deg, var(--accent), var(--accent-strong, var(--accent)));
+  width:          0%;
+  transition:     width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.mai-intensity-pct {
+  font-size:    9px;
+  font-family:  var(--font-mono);
+  color:        var(--muted);
+  width:        28px;
+  text-align:   right;
+}
+
+/* ── Pulse animation on active button icon ── */
+.mai-btn.mai-active .mai-btn-icon {
+  animation: maiIconPulse 2s ease-in-out infinite;
+}
+@keyframes maiIconPulse {
+  0%,100% { opacity: 1;   transform: scale(1);    }
+  50%     { opacity: .75; transform: scale(0.92); }
+}

@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>ZENITH — Build Deep. Rise Daily.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="Deep focus, adaptive sessions, and behavioral intelligence — your cognitive performance companion."/>
+  <link rel="manifest" href="manifest.json"/>
+  <!-- Resource hints: resolve DNS and negotiate connections early -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com"/>
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com"/>
+
+  <!-- Preload the logo used in the LCP splash screen -->
+  <link rel="preload" href="assets/icons/logo.webp" as="image" type="image/png" fetchpriority="high"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/favicon-512.png"/>
+  <link rel="icon" type="image/png" sizes="384x384" href="assets/icons/favicon-384.png"/>
+  <link rel="icon" type="image/png" sizes="256x256" href="assets/icons/favicon-256.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon-192.png"/>
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/icons/favicon-128.png"/>
+  <link rel="icon" type="image/png" sizes="96x96"   href="assets/icons/favicon-96.png"/>
+  <link rel="icon" type="image/png" sizes="72x72"   href="assets/icons/favicon-72.png"/>
+  <!-- Apple touch icons -->
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/favicon-192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/favicon-512.png"/>
+  <!-- Preload the display font subset — eliminates FOUT for the brand wordmark -->
+  <!-- Google Fonts: loaded asynchronously so they never block FCP/LCP.
+       The print-media trick forces the browser to download without blocking
+       render, then swaps to 'all' on load. noscript fallback for JS-off. -->
+  <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  </noscript>
+  <meta name="theme-color" content="#0b1120">
+  <meta name="color-scheme" content="dark light">
+<meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+img-src 'self' data: blob:;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com data:;
+script-src 'self' 'unsafe-inline' 'unsafe-eval';
+media-src 'self' blob:;
+connect-src 'self';
+">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ZENITH">
+<link rel="apple-touch-startup-image" href="/assets/splash/splash-640x1136.png" media="(device-width: 320px)">
+<link rel="apple-touch-startup-image" href="/assets/splash/splash-1125x2436.png" media="(device-width: 375px)">
+<link rel="apple-touch-startup-image" href="/assets/splash/splash-1242x2688.png" media="(device-width: 414px)">
+<!-- CRITICAL CSS — render-blocking, loaded immediately -->
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="phase1-glass.css">
+<link rel="stylesheet" href="profile.css">
+
+<!-- NON-CRITICAL CSS — loaded asynchronously to unblock first paint.
+     The print-media trick is the most compatible zero-JS approach:
+     browser downloads without blocking render, then switches to 'all' on load. -->
+<link rel="preload" href="analytics.css"            as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="pipeline.css"             as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="phase3.css"               as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="music-ai.css"             as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="phase4.css"               as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="phase6.css"               as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="phase-sync-challenges.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<!-- Fallback for JS-disabled environments -->
+<noscript>
+  <link rel="stylesheet" href="analytics.css">
+  <link rel="stylesheet" href="pipeline.css">
+  <link rel="stylesheet" href="phase3.css">
+  <link rel="stylesheet" href="music-ai.css">
+  <link rel="stylesheet" href="phase4.css">
+  <link rel="stylesheet" href="phase6.css">
+  <link rel="stylesheet" href="phase-sync-challenges.css">
+</noscript>
+</head>
+<body class="dark">
+
+<!-- SVG gradient defs for timer ring -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="var(--accent)"/>
+      <stop offset="100%" stop-color="var(--accent-strong)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- DESKTOP SIDEBAR (hidden on mobile via CSS) -->
+<aside class="desktop-sidebar" aria-label="Sidebar navigation">
+<div class="sidebar-brand">
+  <div class="brand-wrap">
+    <img src="assets/icons/logo.webp" alt="ZENITH Logo" class="brand-logo"
+         width="60" height="60" decoding="async" loading="lazy">
+    <div class="brand-text">
+      <span class="brand">ZENITH</span>
+      <span class="tagline">Build Deep. Rise Daily.</span>
+    </div>
+  </div>
+</div>
+  <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+    <button class="sidebar-nav-btn active" data-sec="home" onclick="showSection('home')" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </button>
+    <button class="sidebar-nav-btn" data-sec="focus" onclick="showSection('focus')" aria-label="Focus Timer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Focus
+    </button>
+    <button class="sidebar-nav-btn" data-sec="tasks" onclick="showSection('tasks')" aria-label="Tasks">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Tasks
+    </button>
+    <button class="sidebar-nav-btn" data-sec="stats" onclick="showSection('stats')" aria-label="Stats">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Stats
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-footer-btn" onclick="openSettings()" aria-label="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
+    <div class="sidebar-momentum">
+      <span class="smi-label">Momentum</span>
+      <div class="smi-bar"><div class="smi-fill" id="sidebarSmiFill" style="width:0%"></div></div>
+      <span class="smi-state" id="sidebarSmiState">Starting</span>
+    </div>
+  </div>
+</aside>
+
+<!-- BACKGROUNDS -->
+<div id="bgLayer" aria-hidden="true">
+  <div class="bg-base"></div>
+  <div class="bg-accent"></div>
+</div>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="live-bg" aria-hidden="true"></div>
+
+<div id="app-splash" role="status" aria-label="ZENITH loading">
+
+  <!-- Ambient pulse behind everything -->
+  <div class="splash-aura" aria-hidden="true"></div>
+
+  <!-- Outer breathing ring -->
+  <div class="splash-glow-ring" aria-hidden="true"></div>
+
+  <!-- Logo + spinning ring -->
+  <div class="splash-logo-wrap" aria-hidden="true">
+    <div class="splash-logo-ring"></div>
+    <img src="assets/icons/logo.webp" alt="" class="splash-logo-img"
+         width="120" height="120" fetchpriority="high" decoding="async">
+  </div>
+
+  <!-- Wordmark -->
+  <div class="splash-wordmark" aria-hidden="true">ZENITH</div>
+
+  <!-- Tagline -->
+  <div class="splash-tagline" aria-hidden="true">Build Deep. Rise Daily.</div>
+
+  <!-- Motivational quote — filled by phase1-electron.js -->
+  <p class="splash-quote" id="splashQuote" aria-hidden="true"></p>
+
+  <!-- Loading indicator dots -->
+  <div class="splash-dots" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+</div>
+
+<!-- HEADER -->
+<header class="app-header" role="banner">
+  <div class="header-left">
+    <button type="button" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme" title="Toggle theme (L)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+  <div class="header-center">
+    <span class="brand">ZENITH</span>
+    <span class="tagline">Build Deep. Rise Daily.</span>
+  </div>
+  <div class="header-right">
+    <button type="button" onclick="toggleSilent()" id="silentBtn" aria-label="Toggle silent mode" title="Silent mode (T)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+    <button type="button" onclick="openSettings()" aria-label="Open settings" aria-haspopup="dialog" title="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- MODAL BACKDROP (single, fixed) -->
+<div id="modalBackdrop" class="modal-backdrop" aria-hidden="true" role="presentation"></div>
+
+<!-- MAIN APP -->
+<main class="app" role="main">
+
+  <!-- ═══ HOME SECTION ═══ -->
+  <section id="homeSection" class="app-section active" aria-label="Home">
+<!-- ═══ HERO CARD ═══ -->
+<div class="card hero-card">
+  <!-- TOP -->
+  <div class="hero-top">
+    <div class="hero-text">
+      <h3 id="greeting">Good morning, VEER</h3>
+      <div class="live-time" id="liveTime" aria-live="polite"></div>
+    </div>
+    <div class="hero-glow"></div>
+  </div>
+  <!-- INTENT -->
+  <div class="intent-wrap">
+    <label for="dailyIntent">Today's Focus</label>
+    <input
+      id="dailyIntent"
+      class="intent-input"
+      type="text"
+      placeholder="What matters most today?"
+      autocomplete="off"
+    />
+  </div>
+</div>
+
+    <!-- Identity Card -->
+    <div class="card identity-card" aria-labelledby="identityTitle">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Identity
+      </div>
+      <div class="streak-fire" id="streakFire">🔥</div>
+      <p class="identity-text" id="identityText">Every session builds who you're becoming.</p>
+      <div class="identity-narrative">
+        <p id="identityNarrative">Start today. One session is enough.</p>
+      </div>
+      <p class="identity-sub" id="identityStreak" style="margin-top:10px;"></p>
+    </div>
+
+    <!-- Focus Score -->
+    <div class="card focus-score-card">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Focus Score
+      </div>
+      <div class="focus-score-num" id="scoreNum">--</div>
+      <p class="focus-score-insight" id="scoreInsight">Complete a session to build your score</p>
+ <hr class="card-divider">
+    <!-- Daily Insight -->
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Daily Insight
+      </div>
+      <p class="insight-text" id="dailyInsight">Loading insight…</p>
+    </div>
+
+    <footer class="home-footer">
+      Built with ❤️ by <strong>VEER</strong><br>
+      Focus. Momentum. Identity. Consistency.
+    </footer>
+  </section>
+
+  <!-- ═══ FOCUS SECTION ═══ -->
+  <section id="focusSection" class="app-section" aria-label="Focus Timer">
+<div id="adaptiveBanner" class="adaptive-banner" style="display:none" role="status" aria-live="polite">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        Smart Recommendations
+      </div>
+      <div class="rec-list" id="recList"></div>
+    </div>
+
+    <div class="card focus-card">
+
+      <!-- Phase badge -->
+      <div style="display:flex;justify-content:center;">
+        <div class="phase-badge" id="phaseBadge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Focus Session
+        </div>
+      </div>
+
+      <!-- Focus Mode Selector (Feature 4) -->
+      <div class="mode-selector" id="modeSelector" role="group" aria-label="Focus mode">
+        <button class="mode-pill active" data-mode="standard" onclick="selectFocusMode('standard')" title="Classic 25/5 Pomodoro">⏱ Standard</button>
+        <button class="mode-pill" data-mode="sprint"   onclick="selectFocusMode('sprint')"   title="15-min intense burst">⚡ Sprint</button>
+        <button class="mode-pill" data-mode="deep"     onclick="selectFocusMode('deep')"     title="50-min deep work">🎯 Deep</button>
+        <button class="mode-pill" data-mode="creative" onclick="selectFocusMode('creative')" title="45-min creative flow">🎨 Creative</button>
+        <button class="mode-pill" data-mode="recovery" onclick="selectFocusMode('recovery')" title="10-min gentle re-entry">🌱 Recovery</button>
+        <button class="mode-pill" data-mode="burnout"  onclick="selectFocusMode('burnout')"  title="20-min reduced load">🛡 Burnout Safe</button>
+      </div>
+      <div class="mode-desc-row" id="modeDescRow">Classic Pomodoro · 25 min</div>
+
+      <!-- Timer Ring -->
+      <div class="timer-wrap" id="timerWrap">
+        <svg class="progress-ring" viewBox="0 0 190 190" aria-hidden="true">
+          <circle class="ring-bg" cx="95" cy="95" r="85"/>
+          <circle class="ring-glow" cx="95" cy="95" r="85" stroke-dasharray="534" stroke-dashoffset="534"/>
+          <circle class="ring-prog" cx="95" cy="95" r="85" stroke-dasharray="534" stroke-dashoffset="534"/>
+        </svg>
+        <div class="timer-center">
+          <div id="time" class="timer-digits" role="timer" aria-live="polite" aria-atomic="true">25:00</div>
+          <div class="timer-state-label" id="timerStateLabel">ready</div>
+        </div>
+      </div>
+
+      <!-- Cycle Dots -->
+      <div class="cycle-dots" id="cycleDots" aria-label="Pomodoro cycle" role="progressbar">
+        <div class="cycle-dot" data-cycle="0"></div>
+        <div class="cycle-dot" data-cycle="1"></div>
+        <div class="cycle-dot" data-cycle="2"></div>
+        <div class="cycle-dot" data-cycle="3"></div>
+      </div>
+
+      <!-- Active Task -->
+      <div class="active-task-strip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Working on: <strong id="activeTask">No active task</strong></span>
+      </div>
+
+      <!-- Quote -->
+      <blockquote aria-live="polite">
+        <p id="quoteText">Begin gently. Stay present.</p>
+      </blockquote>
+
+      <!-- Timer Actions -->
+      <div class="timer-actions">
+        <button id="timerToggleBtn" onclick="toggleTimer()" aria-label="Start timer">Start</button>
+        <div class="secondary-actions">
+          <button class="secondary" onclick="skipBreak()" id="skipBreakBtn" hidden>Skip</button>
+          <button class="secondary" onclick="restartSession()" title="Restart (F)">Restart</button>
+          <button class="secondary" onclick="resetPomodoro()" title="Reset (R)">Reset</button>
+          <button class="secondary" onclick="toggleDeepFocus()" title="Deep Focus (D)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Deep
+          </button>
+        </div>
+        <button id="focusMusicToggle" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Focus Music
+        </button>
+      </div>
+
+<div class="mai-panel" aria-label="Focus Music AI — generative soundscapes">
+
+  <!-- Header -->
+  <div class="mai-header">
+    <span class="mai-title">
+      Focus Music AI
+      <span>GENERATIVE</span>
+    </span>
+    <span class="mai-status mai-off" id="maiStatus">Off</span>
+  </div>
+
+
+       <p class="mai-headphone-note">
+         🎧 Use headphones for binaural and neural modes.
+       </p>
+
+  <!-- Generator Buttons -->
+  <div class="mai-buttons" role="group" aria-label="Choose a generative soundscape">
+
+    <button class="mai-btn" id="mai-btn-neural"
+            onclick="ZenithMusicAI.play('neural')"
+            aria-pressed="false"
+            title="Neural — binaural beats + ambient drone + pink texture">
+      <span class="mai-btn-icon">🧠</span>
+      <span class="mai-btn-label">Neural</span>
+      <span class="mai-btn-sub">Beats + drone + texture</span>
+    </button>
+
+    <button class="mai-btn" id="mai-btn-binaural"
+            onclick="ZenithMusicAI.play('binaural')"
+            aria-pressed="false"
+            title="Binaural — pure stereo beat frequencies, adapts to focus mode">
+      <span class="mai-btn-icon">🎵</span>
+      <span class="mai-btn-label">Binaural</span>
+      <span class="mai-btn-sub">Stereo beat tones</span>
+    </button>
+
+    <button class="mai-btn" id="mai-btn-rain"
+            onclick="ZenithMusicAI.play('rain')"
+            aria-pressed="false"
+            title="Rain — generative filtered noise, intensity rises with session">
+      <span class="mai-btn-icon">🌧</span>
+      <span class="mai-btn-label">Rain</span>
+      <span class="mai-btn-sub">Filtered noise layers</span>
+    </button>
+
+    <button class="mai-btn" id="mai-btn-drone"
+            onclick="ZenithMusicAI.play('drone')"
+            aria-pressed="false"
+            title="Drone — harmonic oscillators with slow breathing LFO">
+      <span class="mai-btn-icon">🎶</span>
+      <span class="mai-btn-label">Drone</span>
+      <span class="mai-btn-sub">Harmonic pad + LFO</span>
+    </button>
+
+  </div>
+
+  <!-- Session Intensity Bar -->
+  <div class="mai-intensity">
+    <span class="mai-intensity-label">Intensity</span>
+    <div class="mai-intensity-track">
+      <div class="mai-intensity-fill" id="maiIntensityFill"></div>
+    </div>
+    <span class="mai-intensity-pct" id="maiIntensityPct">0%</span>
+  </div>
+
+</div>
+
+      <!-- Session Tag Row (Feature 6) -->
+      <div class="session-tags" id="sessionTagRow" aria-label="Tag this session type">
+        <span class="tag-label">Tag:</span>
+        <button class="session-tag-btn" data-tag="Coding"   onclick="setSessionTag('Coding')">💻 Coding</button>
+        <button class="session-tag-btn" data-tag="Writing"  onclick="setSessionTag('Writing')">✍ Writing</button>
+        <button class="session-tag-btn" data-tag="Study"    onclick="setSessionTag('Study')">📚 Study</button>
+        <button class="session-tag-btn" data-tag="Creative" onclick="setSessionTag('Creative')">🎨 Creative</button>
+        <button class="session-tag-btn" data-tag="Admin"    onclick="setSessionTag('Admin')">📋 Admin</button>
+        <button class="session-tag-btn" data-tag="Planning" onclick="setSessionTag('Planning')">🗺 Planning</button>
+      </div>
+
+      <!-- Distraction capture (from proto) -->
+      <button class="distraction-btn" onclick="captureDistraction()">📌 Got distracted? Capture it — stay focused</button>
+    </div>
+  </section>
+
+  <!-- ═══ TASKS SECTION ═══ -->
+  <section id="tasksSection" class="app-section" aria-label="Tasks">
+
+    <div class="tasks-header">
+      <h3>Tasks</h3>
+      <button onclick="openModal('taskModal')" style="padding:9px 14px;font-size:13px;" aria-label="Add task" title="Add task (N)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Task
+      </button>
+    </div>
+
+    <!-- Today Dashboard -->
+<!-- ═══════════════════════════════════════════
+     TODAY + PROGRESS MEGA CARD
+═══════════════════════════════════════════ -->
+<div class="card dashboard-mega-card" id="todayDashboard">
+
+  <!-- TOP -->
+  <div class="dashboard-top">
+
+    <!-- LEFT -->
+    <div class="dashboard-progress">
+
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Progress
+      </div>
+
+      <div class="level-badge">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+
+        Level <span id="level">1</span>
+      </div>
+
+      <!-- XP -->
+      <div class="xp-section">
+
+        <div class="xp-bar-wrap">
+          <div class="xp-bar" id="xpBar" style="width:0%"></div>
+        </div>
+
+        <div class="xp-label">
+          <span><b id="xp">0</b> XP</span>
+          <span>Next: <b id="xpNext">100</b> XP</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="dashboard-streak">
+
+      <div class="streak-fire">🔥</div>
+
+      <div class="streak-number" id="statsStreak">0</div>
+
+      <div class="streak-label" id="statsStreakLabel">
+        day streak
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TODAY STATS -->
+  <div class="today-dash">
+
+    <div class="td-stat">
+      <b id="todayFocus">0</b>
+      <small>min focused</small>
+    </div>
+
+    <div class="td-stat">
+      <b id="todaySessions">0</b>
+      <small>sessions</small>
+    </div>
+
+    <div class="td-stat">
+      <b id="todayStreak">0</b>
+      <small>day streak</small>
+    </div>
+
+  </div>
+
+  <!-- MOMENTUM -->
+  <div class="momentum-bar">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+
+    <span>Momentum:</span>
+
+    <b id="momentumText">Calculating…</b>
+
+  </div>
+
+  <!-- NEXT TASK -->
+  <div class="next-focus-row">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="14"
+         height="14"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 8 12 12 14 14"/>
+    </svg>
+
+    <span>Next focus:</span>
+
+    <b id="todayNextTask">None</b>
+
+  </div>
+
+  <!-- SMART FOCUS -->
+  <button onclick="startSmartFocus()"
+          class="smart-focus-btn"
+          title="Smart Focus picks your highest-priority task">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="15"
+         height="15"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+
+    Smart Focus
+
+  </button>
+
+  <!-- SUMMARY -->
+  <div class="completed-summary">
+    <span>Today: <b id="todayDone">0</b> done</span>
+    <span>Week: <b id="weekDone">0</b> done</span>
+  </div>
+
+</div>
+
+    <!-- Tabbed task list -->
+    <nav class="task-tabs" aria-label="Task view tabs">
+      <button class="task-tab-btn active" onclick="switchTaskTab('tabActive', this)">Active</button>
+      <button class="task-tab-btn" onclick="switchTaskTab('tabDone', this)">Done</button>
+      <button class="task-tab-btn" onclick="switchTaskTab('tabLater', this)">Later List <span id="distractBadge" style="font-size:.68rem;opacity:.7"></span></button>
+    </nav>
+
+    <div id="tabActive" class="task-tab-pane active">
+      <div id="tasks" role="list" aria-label="Active task list"></div>
+    </div>
+    <div id="tabDone" class="task-tab-pane">
+      <div id="tasksDone" role="list" aria-label="Completed tasks"></div>
+    </div>
+    <div id="tabLater" class="task-tab-pane">
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px;font-style:italic">Captured distractions — things to handle later so you can stay focused now.</p>
+      <div id="distractionList"></div>
+    </div>
+
+  </section>
+
+  <!-- ═══ STATS SECTION ═══ -->
+  <section id="statsSection" class="app-section" aria-label="Stats & Progress">
+    <div class="desktop-stats-grid">
+
+<div class="card ai-card" aria-labelledby="aiCardTitle">
+
+  <!-- Header -->
+  <div class="ai-card-header">
+    <div class="ai-header-icon" aria-hidden="true">🧠</div>
+    <div class="ai-header-text">
+      <h3 id="aiCardTitle">Focus Intelligence</h3>
+      <p>Behavioral patterns · Deep analytics</p>
+    </div>
+  </div>
+
+  <!-- Overall Score -->
+  <div class="ai-score-block">
+    <div class="ai-score-ring-wrap" aria-label="Intelligence score">
+      <div class="ai-score-ring-bg"></div>
+      <div class="ai-score-num" id="aiOverallScore" aria-live="polite">--</div>
+    </div>
+    <div class="ai-score-meta">
+      <span class="ai-score-label-big" id="aiScoreLabel">--</span>
+      <span class="ai-score-sub">
+        <b id="aiTotalSessions">0</b> total sessions ·
+        Consistency: <b id="aiConsistencyLabel">--</b>
+      </span>
+    </div>
+  </div>
+
+  <!-- Metric Pills -->
+  <div class="ai-pills-grid" role="list">
+    <div class="ai-pill" role="listitem">
+      <span class="ai-pill-title">Burnout Risk</span>
+      <span class="ai-pill-value pill-ok" id="aiPillBurnout">--</span>
+    </div>
+    <div class="ai-pill" role="listitem">
+      <span class="ai-pill-title">Consistency</span>
+      <span class="ai-pill-value" id="aiPillConsistency">--</span>
+    </div>
+    <div class="ai-pill" role="listitem">
+      <span class="ai-pill-title">Velocity</span>
+      <span class="ai-pill-value" id="aiPillVelocity">--</span>
+    </div>
+    <div class="ai-pill" role="listitem">
+      <span class="ai-pill-title">Recovery</span>
+      <span class="ai-pill-value" id="aiPillRecovery">--</span>
+    </div>
+  </div>
+
+  <!-- Peak Focus Window -->
+  <div class="ai-peak-row" aria-label="Peak focus window">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    <span class="ai-peak-label">Peak focus window</span>
+    <span class="ai-peak-value" id="aiPeakHour">--</span>
+  </div>
+
+  <!-- Burnout Risk Meter -->
+  <div class="ai-burnout-section">
+    <div class="ai-burnout-header">
+      <span class="ai-burnout-title">Burnout Risk Meter</span>
+      <span class="ai-burnout-label" id="aiBurnoutLabel">--</span>
+    </div>
+    <div class="ai-burnout-track" role="progressbar"
+         aria-label="Burnout risk level" aria-valuemin="0" aria-valuemax="100">
+      <div class="ai-burnout-fill burnout-low" id="aiBurnoutFill" style="width: 0%"></div>
+    </div>
+    <p class="ai-burnout-sub" id="aiBurnoutSess"></p>
+  </div>
+  <!-- Focus Heatmap (7 days × 24 hours) -->
+  <div class="ai-section-label">Focus Heatmap · 7 days × 24 hours</div>
+  <div class="ai-heatmap-wrap">
+    <svg id="aiHeatmapSvg" aria-label="Focus heatmap by hour and day of week"></svg>
+  </div>
+  <!-- 14-Day Bar Chart (minutes) -->
+  <div class="ai-section-label" style="margin-top:14px">Daily Minutes · Last 14 Days</div>
+  <div class="ai-barchart-wrap">
+    <svg id="aiBarChartSvg" aria-label="Daily focus minutes over last 14 days"></svg>
+  </div>
+  <!-- Insights -->
+  <div class="ai-section-label" style="margin-top:14px">Key Insights</div>
+  <div class="ai-insights-list" id="aiInsightsList" aria-live="polite"></div>
+</div>
+
+<div class="card cog-card" aria-labelledby="cogCardTitle">
+
+  <!-- Header -->
+  <div class="ai-card-header">
+    <div class="ai-header-icon" aria-hidden="true">📊</div>
+    <div class="ai-header-text">
+      <h3 id="cogCardTitle">Cognitive Performance</h3>
+      <p>5-dimension performance radar</p>
+    </div>
+  </div>
+
+  <!-- Empty state (shown until 3+ rich sessions exist) -->
+  <div id="cogEmptyState" class="cog-empty" style="display:none">
+    Complete a few more sessions to unlock the performance radar.
+  </div>
+
+  <!-- Main content -->
+  <div id="cogMainContent">
+
+    <!-- Pentagon Radar -->
+    <div class="cog-radar-wrap">
+      <svg id="cogRadarSvg" aria-label="5-dimension performance radar chart"></svg>
+    </div>
+
+    <!-- 5 Metric Progress Rings -->
+    <div class="cog-metrics-grid">
+
+      <div class="cog-metric">
+        <div class="cog-metric-ring" id="cogEnduranceRing"></div>
+        <span class="cog-metric-val cog-muted" id="cogEnduranceVal">--</span>
+        <span class="cog-metric-label">Focus Endurance</span>
+        <span class="cog-metric-sub" id="cogEnduranceSub">--</span>
+        <span class="cog-trend-badge" id="cogEnduranceTrend" style="display:none"></span>
+      </div>
+
+      <div class="cog-metric">
+        <div class="cog-metric-ring" id="cogRecoveryRing"></div>
+        <span class="cog-metric-val cog-muted" id="cogRecoveryVal">--</span>
+        <span class="cog-metric-label">Recovery Rate</span>
+        <span class="cog-metric-sub" id="cogRecoverySub">--</span>
+      </div>
+
+      <div class="cog-metric">
+        <div class="cog-metric-ring" id="cogConsistencyRing"></div>
+        <span class="cog-metric-val cog-muted" id="cogConsistencyVal">--</span>
+        <span class="cog-metric-label">Consistency</span>
+        <span class="cog-metric-sub" id="cogConsistencySub">--</span>
+      </div>
+
+      <div class="cog-metric">
+        <div class="cog-metric-ring" id="cogVelocityRing"></div>
+        <span class="cog-metric-val cog-muted" id="cogVelocityVal">--</span>
+        <span class="cog-metric-label">Productivity Velocity</span>
+        <span class="cog-metric-sub" id="cogVelocitySub">--</span>
+      </div>
+
+      <div class="cog-metric">
+        <div class="cog-metric-ring" id="cogDistractionRing"></div>
+        <span class="cog-metric-val cog-muted" id="cogDistractionVal">--</span>
+        <span class="cog-metric-label">Distraction Resistance</span>
+        <span class="cog-metric-sub" id="cogDistractionSub">--</span>
+      </div>
+
+    </div>
+  </div><!-- /cogMainContent -->
+
+</div>
+
+    <!-- Focus Stats -->
+    <div class="card focus-stats-card">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Focus Stats
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="td-stat"><b id="todayMin">0</b><small>min today</small></div>
+        <div class="td-stat"><b id="todaySess">0</b><small>sessions today</small></div>
+        <div class="td-stat"><b id="weekMin">0</b><small>min this week</small></div>
+        <div class="td-stat" style="grid-column:span 1;"><b id="totalSessAll">0</b><small>all-time sessions</small></div>
+      </div>
+
+<hr class="card-divider">
+
+    <!-- Monthly Heatmap -->
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Monthly Focus
+      </div>
+      <div id="heatmap" role="grid" aria-label="Monthly focus heatmap"></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:8px;justify-content:flex-end;">
+        <span style="font-size:11px;color:var(--muted)">Less</span>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat-0);border:1px solid var(--card-border)"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat-1)"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat-2)"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat-3)"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat-4)"></div>
+        <span style="font-size:11px;color:var(--muted)">More</span>
+      </div>
+    </div>
+
+    <!-- SKILL TREE (Second Tier) -->
+    <div class="card">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Focus Skill Tree
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">XP unlocks perks. Perks make every session more powerful.</p>
+      <div class="skill-tree" id="skillTree"></div>
+    </div>
+
+    <!-- FEATURE 8 — Recovery Score Card -->
+    <div class="card">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        Recovery Score
+      </div>
+      <div class="recovery-score-display">
+        <div class="recovery-score-num" id="recovScoreNum">--</div>
+        <div class="recovery-metrics">
+          <div class="recovery-metric-row">
+            <span class="recovery-metric-label">Restart rate</span>
+            <div class="recovery-metric-bar"><div class="recovery-metric-fill" id="recovRestartBar" style="width:0%"></div></div>
+          </div>
+          <div class="recovery-metric-row">
+            <span class="recovery-metric-label">Restart speed</span>
+            <div class="recovery-metric-bar"><div class="recovery-metric-fill" id="recovSpeedBar" style="width:0%"></div></div>
+          </div>
+          <div class="recovery-metric-row">
+            <span class="recovery-metric-label">Bounce-backs</span>
+            <div class="recovery-metric-bar"><div class="recovery-metric-fill" id="recovConsistBar" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="recovery-insight-text" id="recovInsightText">Log a distraction + restart to build your Recovery Score.</p>
+
+ <hr class="card-divider">
+
+    <!-- BEHAVIORAL PATTERNS (Second Tier) -->
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Your Patterns
+      </div>
+      <div class="pattern-grid" id="patternGrid">
+        <div class="pattern-stat"><span class="p-val" id="patBestHour">--</span><small>best hour</small></div>
+        <div class="pattern-stat"><span class="p-val" id="patTopTag">--</span><small>top session type</small></div>
+        <div class="pattern-stat"><span class="p-val" id="patTopMode">--</span><small>best mode</small></div>
+        <div class="pattern-stat"><span class="p-val" id="patAvgSess">--</span><small>avg sessions/day</small></div>
+      </div>
+      <div class="pattern-insight-list" id="patternInsights">
+        <div class="pattern-insight-row dim">🔍 Complete more sessions to reveal your patterns.</div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="card">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        Achievements
+      </div>
+      <ul id="achievements" aria-label="Achievements list"></ul>
+    </div>
+
+    <!-- Weekly Reflection -->
+    <div class="card" id="weeklyReflectionSection">
+      <div class="card-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Weekly Reflection
+      </div>
+      <p style="margin-bottom:4px;">This week, I'm proud that I showed up.</p>
+      <input id="reflectionInput" class="reflection-input" placeholder="One honest line (optional)…" type="text"/>
+      <button onclick="saveReflection()" style="margin-top:4px;width:100%;">Save Reflection</button>
+    </div>
+
+  </div><!-- /desktop-stats-grid -->
+  </section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+  <button data-sec="home" onclick="showSection('home')" aria-label="Home" class="active">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </button>
+  <button data-sec="focus" onclick="showSection('focus')" aria-label="Focus Timer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Focus
+  </button>
+  <button data-sec="tasks" onclick="showSection('tasks')" aria-label="Tasks">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Tasks
+  </button>
+  <button data-sec="stats" onclick="showSection('stats')" aria-label="Stats">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Stats
+  </button>
+</nav>
+
+<!-- FAB (proto-style multi-item) -->
+<div class="fab" id="fabContainer">
+  <div class="fab-menu" id="fabMenu">
+    <div class="fab-item">
+      <span class="fab-item-label">Add Task</span>
+      <button class="fab-item-btn" onclick="openModal('taskModal');closeFab()" aria-label="Add task">📋</button>
+    </div>
+    <div class="fab-item">
+      <span class="fab-item-label">Smart Focus</span>
+      <button class="fab-item-btn" onclick="startSmartFocus();closeFab()" aria-label="Smart focus">⚡</button>
+    </div>
+    <div class="fab-item">
+      <span class="fab-item-label">Deep Focus</span>
+      <button class="fab-item-btn" onclick="toggleDeepFocus();closeFab()" aria-label="Deep focus">🎯</button>
+    </div>
+    <div class="fab-item">
+      <span class="fab-item-label">Capture Distraction</span>
+      <button class="fab-item-btn" onclick="captureDistraction();closeFab()" aria-label="Capture distraction">📌</button>
+    </div>
+    <div class="fab-item">
+      <span class="fab-item-label">Settings</span>
+      <button class="fab-item-btn" onclick="openSettings();closeFab()" aria-label="Open settings">⚙️</button>
+    </div>
+  </div>
+  <button class="fab-main" id="fabMain" onclick="toggleFab()" aria-label="Open actions menu" aria-expanded="false">＋</button>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<!-- Add Task Modal -->
+<div id="taskModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle" hidden>
+  <h3 id="taskModalTitle">New Task</h3>
+  <label for="taskName">Task Name</label>
+  <input id="taskName" type="text" placeholder="e.g. Biology Revision Chapter 3" autocomplete="off"/>
+  <label for="taskSessions">Sessions Needed</label>
+  <input id="taskSessions" type="number" min="1" max="99" placeholder="How many 25-min sessions?" value="2"/>
+  <label for="taskDue">Due Date (optional)</label>
+  <input id="taskDue" type="date"/>
+  <div class="modal-actions">
+    <button class="secondary" onclick="closeModal()">Cancel</button>
+    <button onclick="addTask()">Add Task</button>
+  </div>
+</div>
+
+<!-- Edit Task Modal -->
+<div id="editTaskModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editTaskModalTitle" hidden>
+  <h3 id="editTaskModalTitle">Edit Task</h3>
+  <input id="editTaskId" type="hidden"/>
+  <label for="editTaskName">Task Name</label>
+  <input id="editTaskName" type="text" autocomplete="off"/>
+  <label for="editTaskSessions">Total Sessions</label>
+  <input id="editTaskSessions" type="number" min="1" max="99"/>
+  <label for="editTaskDue">Due Date</label>
+  <input id="editTaskDue" type="date"/>
+  <div class="modal-actions">
+    <button class="secondary" onclick="closeModal()">Cancel</button>
+    <button onclick="saveEditTask()">Save Changes</button>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+  <h3 id="settingsTitle">Settings</h3>
+
+  <div class="settings-section">
+    <h4>Timer</h4>
+    <div class="timer-inputs">
+      <div class="timer-input-group">
+        <label for="focusIn">Focus</label>
+        <input id="focusIn" type="number" min="1" max="120"/>
+      </div>
+      <div class="timer-input-group">
+        <label for="breakIn">Break</label>
+        <input id="breakIn" type="number" min="0" max="30"/>
+      </div>
+      <div class="timer-input-group">
+        <label for="longIn">Long Break</label>
+        <input id="longIn" type="number" min="0" max="60"/>
+      </div>
+    </div>
+    <button onclick="applyTimer()" style="width:100%;margin-top:12px;">Apply Timer</button>
+    <div class="preset-buttons">
+      <button class="secondary" onclick="applyPreset('deep')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Deep
+        <small>50/7/15</small>
+      </button>
+      <button class="secondary" onclick="applyPreset('light')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Light
+        <small>35/4/12</small>
+      </button>
+      <button class="secondary" onclick="applyPreset('night')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Night
+        <small>20/1/2</small>
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="settings-section">
+    <h4>Theme</h4>
+    <div class="theme-pills">
+      <button class="theme-pill active" onclick="setTheme('dark')" id="themeDark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Dark
+      </button>
+      <button class="theme-pill" onclick="setTheme('light')" id="themeLight">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Light
+      </button>
+      <button class="theme-pill" onclick="setTheme('nature')" id="themeNature">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 22H5.71c.38-.81.8-1.6 1.29-2.34C8.84 21.24 10.91 22 13.3 22 19 22 21 16 21 8l-1.5-1L17 8z"/></svg>
+        Nature
+      </button>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="settings-section">
+    <h4>Volume</h4>
+    <div class="volume-row">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <input type="range" id="volumeControl" min="0" max="1" step="0.05"/>
+      <span class="volume-val" id="volumeValue">100%</span>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="settings-section">
+    <h4>Notifications</h4>
+
+<button
+  id="enableNotifBtn"
+  type="button"
+  onclick="enableNotifications()"
+>
+  Enable Notifications
+</button>
+
+    <div class="toggle-row">
+      <span>Focus complete</span>
+      <button class="toggle-switch on" id="notifFocusToggle" onclick="toggleNotifFocus(this)" aria-pressed="true"></button>
+    </div>
+    <div class="toggle-row">
+      <span>Silent mode</span>
+      <button class="toggle-switch" id="silentToggleSettings" onclick="toggleSilent()" aria-pressed="false"></button>
+    </div>
+  </div>
+
+<div class="settings-section" id="settingsPhase3">
+  <h4>Focus Lock &amp; Data</h4>
+
+  <!-- Lock Mode toggle -->
+  <div class="settings-lock-row">
+    <div class="settings-lock-info">
+      <span class="settings-lock-title">🔒 Distraction Lock Mode</span>
+      <span class="settings-lock-desc">
+        Enters fullscreen, blocks tab-switch impulses, and warns before
+        you abandon a session. Enable before starting a deep work block.
+      </span>
+    </div>
+    <label class="toggle" title="Enable Distraction Lock Mode">
+      <input type="checkbox" id="lockModeToggle" onchange="
+        if (this.checked && window.Session?.state === 'running')
+          DistractionLock.engage(window.activeMode || 'Focus');
+        else
+          DistractionLock.release();
+      "/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Manual lock button (for quick-start without starting a session) -->
+  <div style="margin-top:8px;">
+    <button
+      style="width:100%;font-size:12px;padding:8px;"
+      onclick="
+        if (DistractionLock.isActive()) { DistractionLock.release(); this.textContent='⚡ Engage Lock Now'; }
+        else { DistractionLock.engage(window.activeMode || 'Focus'); this.textContent='🔓 Release Lock'; }
+      ">
+      ⚡ Engage Lock Now
+    </button>
+  </div>
+
+  <!-- DB health + export -->
+  <div style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Local Database</div>
+      <span id="dbHealthBadge" class="db-health-badge db-health-ok">
+        ● IndexedDB active
+      </span>
+    </div>
+    <button class="db-export-btn" onclick="ZenithDB.exportAll()">
+      ⬇ Export Backup
+    </button>
+  </div>
+</div>
+
+    <!-- Export -->
+    <button class="secondary" onclick="exportStats()" style="width:100%;margin-bottom:16px;padding:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Stats JSON
+    </button>
+
+  <hr/>
+
+  <div class="settings-section">
+    <h4>Keyboard Shortcuts</h4>
+    <div class="kbd-grid">
+      <div class="kbd-row"><kbd>Space</kbd><span>Play/Pause</span></div>
+      <div class="kbd-row"><kbd>R</kbd><span>Reset</span></div>
+      <div class="kbd-row"><kbd>D</kbd><span>Deep Focus</span></div>
+      <div class="kbd-row"><kbd>F</kbd><span>Restart</span></div>
+      <div class="kbd-row"><kbd>S</kbd><span>Skip Break</span></div>
+      <div class="kbd-row"><kbd>N</kbd><span>New Task</span></div>
+      <div class="kbd-row"><kbd>L</kbd><span>Toggle Theme</span></div>
+      <div class="kbd-row"><kbd>T</kbd><span>Silent Mode</span></div>
+    </div>
+  </div>
+
+  <button class="close-modal" onclick="closeSettings()">Close Settings</button>
+</div>
+
+<!-- ════ COMMAND PALETTE (Feature 1) — Ctrl+K ════ -->
+<div id="commandPalette" class="cp-overlay" inert aria-hidden="true" role="dialog" aria-label="Command palette" aria-modal="true">
+  <div class="cp-backdrop" onclick="closeCommandPalette()"></div>
+  <div class="cp-box">
+    <div class="cp-input-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="cpInput" class="cp-input" type="text" placeholder="Search commands…" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="cpResults"/>
+      <kbd class="cp-esc-hint">esc</kbd>
+    </div>
+    <ul class="cp-results" id="cpResults" role="listbox"></ul>
+  </div>
+</div>
+
+<!-- ════ RECOVERY ENGINE (Feature 2) ════ -->
+<div id="recoveryOverlay" class="focus-overlay" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle" inert>
+  <div class="card" style="max-width:360px;text-align:center;padding:26px 22px;">
+    <div style="font-size:30px;margin-bottom:8px;">⚡</div>
+    <h3 id="recoveryTitle">Focus interrupted</h3>
+    <p style="margin-bottom:16px;font-size:14px">What pulled your attention? Identifying it builds awareness.</p>
+    <div class="recovery-options" id="recoveryOptions">
+      <button class="recovery-opt" onclick="logRecovery('phone')">📱 Phone / Social media</button>
+      <button class="recovery-opt" onclick="logRecovery('thought')">💭 Thought spiral / overthinking</button>
+      <button class="recovery-opt" onclick="logRecovery('resistance')">😤 Task resistance / procrastination</button>
+      <button class="recovery-opt" onclick="logRecovery('external')">🌍 External interruption</button>
+    </div>
+    <div class="recovery-insight" id="recoveryInsight"></div>
+    <div class="recovery-score-line" id="recoveryScoreLine" style="display:none">
+      <span>🔄 Recovery streak:</span><b id="recoveryStreakVal">0</b>
+    </div>
+    <button id="recoveryRestartBtn" onclick="recoveryRestart()" style="width:100%;margin-top:14px;padding:13px;display:none">
+      🔁 Restart Session
+    </button>
+    <button class="secondary" onclick="closeRecoveryOverlay()" style="width:100%;margin-top:8px;padding:11px">
+      Continue Anyway
+    </button>
+  </div>
+</div>
+
+<!-- ════ EMOTIONAL STATE CHECK (Feature 3) ════ -->
+<div id="emotionModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="emotionTitle" hidden>
+  <h3 id="emotionTitle">How are you feeling?</h3>
+  <p style="text-align:center;font-size:13px;margin-bottom:16px;">This shapes your session mode recommendation.</p>
+  <div class="state-rec-banner" id="stateRecBanner"></div>
+  <div class="emotion-grid" id="emotionGrid">
+    <button class="emotion-btn" onclick="selectEmotion('focused')">
+      <span class="e-icon">🎯</span><span class="e-label">Focused</span>
+      <span class="e-advice">Ready to lock in</span>
+    </button>
+    <button class="emotion-btn" onclick="selectEmotion('calm')">
+      <span class="e-icon">😌</span><span class="e-label">Calm</span>
+      <span class="e-advice">Flow state incoming</span>
+    </button>
+    <button class="emotion-btn" onclick="selectEmotion('tired')">
+      <span class="e-icon">😴</span><span class="e-label">Tired</span>
+      <span class="e-advice">Try a short sprint</span>
+    </button>
+    <button class="emotion-btn" onclick="selectEmotion('anxious')">
+      <span class="e-icon">😰</span><span class="e-label">Anxious</span>
+      <span class="e-advice">Recovery mode first</span>
+    </button>
+    <button class="emotion-btn emotion-wide" onclick="selectEmotion('resistant')">
+      <span class="e-icon">😤</span><span class="e-label">Resistant</span>
+      <span class="e-advice">5-min sprint to break procrastination</span>
+    </button>
+  </div>
+  <button class="close-modal secondary" onclick="skipEmotionCheck()">Skip for now</button>
+</div>
+
+<!-- ════ RESISTANCE INTERVENTION MODAL (Feature 7) ════ -->
+<div id="resistanceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resistanceTitle" hidden>
+  <div style="font-size:28px;text-align:center;margin-bottom:8px;">😤</div>
+  <h3 id="resistanceTitle">High Resistance Detected</h3>
+  <p style="text-align:center;font-size:13px;margin-bottom:18px;" id="resistanceTaskName">This task has been avoided multiple times. That's normal — here's how to break through.</p>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <button onclick="resistanceAction('sprint')" style="padding:13px;text-align:left;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px">⚡</span>
+      <span><b style="display:block;font-size:14px">5-Minute Starter</b><small style="color:rgba(255,255,255,.6)">Just begin. Sprint mode, 5 min only.</small></span>
+    </button>
+    <button onclick="resistanceAction('break')" style="padding:13px;text-align:left;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border-color:var(--card-border);">
+      <span style="font-size:18px">✂</span>
+      <span><b style="display:block;font-size:14px">Break It Down</b><small style="color:rgba(255,255,255,.6)">Split into smaller subtasks first.</small></span>
+    </button>
+    <button onclick="resistanceAction('recovery')" style="padding:13px;text-align:left;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border-color:var(--card-border);">
+      <span style="font-size:18px">🌱</span>
+      <span><b style="display:block;font-size:14px">Low-Friction Mode</b><small style="color:rgba(255,255,255,.6)">Recovery mode — gentlest possible session.</small></span>
+    </button>
+    <button class="secondary" onclick="closeModal()" style="padding:11px;margin-top:4px;">I'll handle it myself</button>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner" class="install-banner" style="display:none;" role="alert">
+  <p>Install ZENITH for offline access</p>
+  <button id="installNow" style="padding:7px 14px;font-size:12px;">Install</button>
+  <button id="installLater" class="secondary" style="padding:7px 10px;font-size:12px;">Later</button>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" inert aria-modal="true" role="dialog" aria-labelledby="onboardTitle">
+  <div class="onboard-content">
+    <div class="onboard-icon" id="onboardIcon">🧠</div>
+    <h2 id="onboardTitle">Welcome to ZENITH</h2>
+    <p id="onboardText">Focus. Consistency. Growth.</p>
+    <div class="onboard-dots" id="onboardDots"></div>
+    <div class="onboard-actions">
+      <button id="onboardNext" onclick="nextOnboarding()">Continue</button>
+      <button class="secondary" onclick="skipOnboarding()">Skip intro</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOCUS OVERLAY (Deep Focus mode) -->
+<div id="focusOverlay" class="focus-overlay" role="dialog" aria-modal="true" aria-labelledby="focusTitle" inert>
+  <div id="particles" aria-hidden="true"></div>
+  <div class="focus-center" style="display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;z-index:1">
+    <h2 id="focusTitle" class="sr-only">Deep Focus Mode</h2>
+    <!-- Breathe ring from proto -->
+    <div class="breathe-ring">
+      <div class="breathe-inner">
+        <div id="focusTime" role="timer" aria-live="polite" aria-atomic="true"
+             style="font-family:var(--font-mono);font-size:2.4rem;font-weight:700;letter-spacing:-.04em;
+                    background:linear-gradient(120deg,var(--text),var(--accent));
+                    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">25:00</div>
+      </div>
+      <!-- subtle SVG progress ring behind the breathe ring -->
+      <svg viewBox="0 0 210 210" style="position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)" aria-hidden="true">
+        <circle class="ring-bg" cx="105" cy="105" r="95" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
+        <circle class="progress" cx="105" cy="105" r="95" fill="none" stroke="url(#timerGrad)" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="597" stroke-dashoffset="597"
+                style="transition:stroke-dashoffset .8s cubic-bezier(.16,1,.3,1)"/>
+      </svg>
+    </div>
+    <p id="dfTaskLabel" style="font-size:.84rem;color:var(--muted);max-width:240px;text-align:center"></p>
+    <button onclick="toggleDeepFocus()" style="padding:9px 22px;font-size:.82rem;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);">Exit Deep Focus</button>
+  </div>
+  <div class="focus-exit" role="status" aria-live="polite">Press <b>ESC</b> or <b>D</b> to exit</div>
+</div>
+
+<!-- Distraction Capture Modal -->
+<div id="distractModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="distractTitle" hidden>
+  <h3 id="distractTitle">📌 Capture Distraction</h3>
+  <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px;text-align:center">Log it and get back to work.<br>You'll handle it in the Later List.</p>
+  <label for="distractInput">What's pulling your attention?</label>
+  <input id="distractInput" type="text" placeholder="e.g. Check email, look up recipe…" autocomplete="off"/>
+  <div class="modal-actions">
+    <button class="secondary" onclick="closeModal()">Back to Focus</button>
+    <button onclick="saveDistraction()">Save to Later</button>
+  </div>
+</div>
+<div id="focusRitual" class="focus-overlay" role="dialog" aria-modal="true" inert>
+  <div class="card" style="max-width:360px;text-align:center;padding:28px 24px;overflow-y:auto;max-height:92dvh;">
+    <div style="font-size:36px;margin-bottom:8px;">✨</div>
+    <h3>Session Complete</h3>
+    <!-- Session tag badge (Feature 6) -->
+    <div id="ritualTagBadge" class="ritual-tag-badge" style="display:none"></div>
+    <p id="ritualLine" style="margin:10px 0 6px;font-size:15px;font-style:italic;line-height:1.6;color:var(--text);"></p>
+    <!-- XP gained row -->
+    <div class="ritual-xp-row" id="ritualXpRow">
+      <span>+10 XP</span><span style="opacity:.5">·</span><span id="ritualStreakLine">🔥 Streak active</span>
+    </div>
+    <!-- Guided reflection questions (Feature 5) -->
+    <div class="reflect-block" id="reflectBlock">
+      <span class="reflect-q-label" id="rq1label">What made this session strong?</span>
+      <textarea class="reflect-q-input" id="rq1" placeholder="Write anything…" rows="2"></textarea>
+      <span class="reflect-q-label" id="rq2label">What weakened your focus?</span>
+      <textarea class="reflect-q-input" id="rq2" placeholder="Honest observation…" rows="2"></textarea>
+      <span class="reflect-q-label" id="rq3label">What should tomorrow feel like?</span>
+      <textarea class="reflect-q-input" id="rq3" placeholder="One word or sentence…" rows="2"></textarea>
+    </div>
+    <button onclick="closeRitual()" style="width:100%;padding:13px;margin-top:14px;">Continue →</button>
+    <button class="secondary ritual-save-reflect" id="ritualSaveReflect" onclick="saveReflectionFromRitual()" style="width:100%;margin-top:8px;padding:10px;display:none">Save Reflection</button>
+  </div>
+</div>
+
+<!-- DECOMPRESSION -->
+<div id="decompressOverlay" class="focus-overlay" role="dialog" aria-modal="true" inert>
+  <div class="card" style="max-width:340px;text-align:center;padding:28px 24px;">
+    <div style="font-size:32px;margin-bottom:10px;">🌬️</div>
+    <h3>Before the next session</h3>
+    <p style="margin-bottom:4px;">Take a short reset.</p>
+    <div class="decomp-btns">
+      <button onclick="handleDecompressionChoice('continue')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18c-4.51 2-5-2-7-2"/><path d="M14 22v-4a2 2 0 0 0-.58-1.42L11 14l2-6 6 1.5-1 3.5"/><path d="M22 11l-4.47 4.47A2 2 0 0 1 16 16h-2.5l-5 2.88"/></svg>
+        Quick Breathe (1 min)
+      </button>
+      <button onclick="handleDecompressionChoice('full')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Full Break + Meditation
+      </button>
+      <button class="secondary" onclick="handleDecompressionChoice('skip')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        Skip, next focus
+      </button>
+    </div>
+    <p id="decompressHint" style="margin-top:10px;font-size:12px;color:var(--muted);"></p>
+  </div>
+</div>
+
+<!-- MEDITATION -->
+<div id="meditationOverlay" class="focus-overlay" role="dialog" aria-modal="true" inert>
+  <div id="meditationParticles" aria-hidden="true"></div>
+  <div class="focus-center meditation zen">
+    <svg class="mandala" viewBox="0 0 400 400" aria-hidden="true">
+      <g class="mandala-rotate">
+        <circle cx="200" cy="200" r="170"/>
+        <circle cx="200" cy="200" r="140"/>
+        <circle cx="200" cy="200" r="110"/>
+        <circle cx="200" cy="200" r="80"/>
+      </g>
+    </svg>
+    <svg class="lotus-svg" viewBox="0 0 200 200" aria-hidden="true">
+      <g class="petals">
+        <path d="M100 20 Q120 70 100 100 Q80 70 100 20Z"/>
+        <path d="M180 100 Q130 120 100 100 Q130 80 180 100Z"/>
+        <path d="M100 180 Q120 130 100 100 Q80 130 100 180Z"/>
+        <path d="M20 100 Q70 120 100 100 Q70 80 20 100Z"/>
+        <path d="M150 50 Q130 90 100 100 Q120 60 150 50Z"/>
+        <path d="M150 150 Q130 110 100 100 Q120 140 150 150Z"/>
+        <path d="M50 150 Q70 110 100 100 Q80 140 50 150Z"/>
+        <path d="M50 50 Q70 90 100 100 Q80 60 50 50Z"/>
+      </g>
+      <circle class="lotus-core" cx="100" cy="100" r="18"/>
+    </svg>
+    <p id="meditationText">Enter stillness</p>
+    <small id="meditationTimer">1 minute</small>
+  </div>
+  <div class="focus-exit" aria-hidden="true">Press <b>ESC</b> to exit</div>
+</div>
+
+<!-- AUDIO -->
+<!-- preload="none" defers all audio until first playback call.
+     "auto" was causing ~1.5 MB of audio to compete with the LCP
+     image and fonts, inflating Speed Index and LCP by ~0.6 s. -->
+<audio id="focusSound"       src="assets/sounds/session-end.mp3"    preload="none"></audio>
+<audio id="breakSound"       src="assets/sounds/break-end.mp3"      preload="none"></audio>
+<audio id="longBreakSound"   src="assets/sounds/long-break-end.mp3" preload="none"></audio>
+<audio id="meditationSound"  src="assets/sounds/meditation-soft.mp3" preload="none" loop></audio>
+<audio id="focusMusic" loop>
+  <source src="assets/sounds/focus.mp3" type="audio/mpeg">
+</audio>
+
+<script defer src="app.js"></script>
+<script defer src="zenith-bridge.js"></script>
+<script defer src="zenith-profile.js"></script>
+<!-- Phase modules: loaded deferred so they don't block interactive -->
+<script defer src="analytics-engine.js"></script>
+<script defer src="analytics-ui.js"></script>
+<script defer src="phase1-electron.js"></script>
+<script defer src="adaptive-focus.js"></script>
+<script defer src="zenith-db.js"></script>
+<script defer src="focus-music-ai.js"></script>
+<script defer src="cognitive-dashboard.js"></script>
+<script defer src="phase4-gamification.js"></script>
+<script defer src="session-replay.js"></script>
+<script defer src="distraction-lock.js"></script>
+<!-- Heavy/non-critical modules: lazy-loaded after page is interactive -->
+<!-- Heavy/non-critical modules: lazy-loaded after page is interactive -->
+<script>
+  function _lazyLoad(src) {
+    var s = document.createElement('script');
+    s.src = src;
+    document.head.appendChild(s); // no .defer = true — it's meaningless here
+  }
+
+  var _lazyModules = [
+    'zenith-sync.js',
+    'zenith-challenges.js',
+    'zenith-notifications.js',
+    'zenith-updater.js',
+  ];
+
+  var _lazyScheduled = false;
+
+  function _scheduleLazy() {
+    if (_lazyScheduled) return;
+    _lazyScheduled = true;
+
+    // ─── FIX: patch document.addEventListener so DOMContentLoaded
+    // handlers in lazy scripts run immediately (event already fired).
+    // Without this, every module's init callback is silently skipped.
+    var _origDocAddListener = document.addEventListener.bind(document);
+    document.addEventListener = function(type, handler, opts) {
+      if (type === 'DOMContentLoaded' && document.readyState !== 'loading') {
+        // Event already fired — execute handler on next tick
+        setTimeout(function() {
+          try {
+            typeof handler === 'function'
+              ? handler()
+              : handler.handleEvent();
+          } catch(e) {
+            console.warn('[LazyLoad] DOMContentLoaded handler error:', e);
+          }
+        }, 0);
+        return;
+      }
+      return _origDocAddListener(type, handler, opts);
+    };
+
+    _lazyModules.forEach(_lazyLoad);
+
+    // Clean up interaction listeners
+    ['click','keydown','touchstart','scroll'].forEach(function(e) {
+      document.removeEventListener(e, _scheduleLazy, { passive: true });
+    });
+  }
+
+  // Fire on first user interaction
+  ['click','keydown','touchstart','scroll'].forEach(function(e) {
+    document.addEventListener(e, _scheduleLazy, { once: true, passive: true });
+  });
+
+  // Or after 3 s regardless
+  setTimeout(_scheduleLazy, 3000);
+</script>
+</body>
+</html>

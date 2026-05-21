@@ -1,0 +1,319 @@
+/* ═══════════════════════════════════════════════════════════════
+   ZENITH — Analytics / Focus Intelligence Styles  (Phase 2)
+   Append to app.css  OR  link as a separate stylesheet
+═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────
+   INTELLIGENCE CARD WRAPPER
+─────────────────────────────────────────── */
+.ai-card {
+  /* inherits .card styles — just extra overrides */
+  container-type: inline-size;
+}
+
+.ai-card-header {
+  display:       flex;
+  align-items:   center;
+  gap:           10px;
+  margin-bottom: 16px;
+}
+.ai-header-icon {
+  width:          34px;
+  height:         34px;
+  border-radius:  10px;
+  background:     color-mix(in srgb, var(--accent) 14%, transparent);
+  border:         1px solid rgba(var(--accent-rgb), .22);
+  display:        flex;
+  align-items:    center;
+  justify-content:center;
+  font-size:      17px;
+  flex-shrink:    0;
+}
+.ai-header-text { flex: 1; }
+.ai-header-text h3 {
+  font-size:      16px;
+  font-weight:    700;
+  margin:         0;
+  color:          var(--text);
+}
+.ai-header-text p {
+  font-size:      11px;
+  color:          var(--muted);
+  margin:         1px 0 0;
+}
+
+/* ───────────────────────────────────────────
+   OVERALL SCORE DISPLAY
+─────────────────────────────────────────── */
+.ai-score-block {
+  display:         flex;
+  align-items:     center;
+  gap:             16px;
+  padding:         12px 0 14px;
+  border-bottom:   1px solid var(--card-border);
+  margin-bottom:   14px;
+}
+
+.ai-score-ring-wrap {
+  position:        relative;
+  width:           64px;
+  height:          64px;
+  flex-shrink:     0;
+}
+.ai-score-ring-bg,
+.ai-score-ring-fill {
+  position:        absolute;
+  inset:           0;
+  border-radius:   50%;
+}
+.ai-score-ring-bg {
+  background: conic-gradient(
+    color-mix(in srgb, var(--accent) 14%, transparent) 360deg,
+    transparent 0deg
+  );
+}
+.ai-score-num {
+  position:        absolute;
+  inset:           0;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-family:     var(--font-mono);
+  font-size:       20px;
+  font-weight:     700;
+}
+.score-elite  { color: #00e5c0; }
+.score-strong { color: #4f9cf9; }
+.score-dev    { color: #f59e0b; }
+.score-build  { color: var(--muted); }
+
+.ai-score-meta { flex: 1; }
+.ai-score-label-big {
+  font-size:       22px;
+  font-weight:     800;
+  color:           var(--text);
+  font-family:     var(--font-display);
+  line-height:     1;
+  display:         block;
+  margin-bottom:   4px;
+}
+.ai-score-sub {
+  font-size:       12px;
+  color:           var(--muted);
+  line-height:     1.4;
+}
+.ai-score-sub b { color: var(--text); font-weight: 700; }
+
+/* ───────────────────────────────────────────
+   METRIC PILLS ROW
+─────────────────────────────────────────── */
+.ai-pills-grid {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   8px;
+  margin-bottom:         16px;
+}
+@container (max-width: 480px) {
+  .ai-pills-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.ai-pill {
+  background:     color-mix(in srgb, var(--card) 80%, transparent);
+  border:         1px solid var(--card-border);
+  border-radius:  12px;
+  padding:        8px 10px;
+  text-align:     center;
+}
+.ai-pill-title {
+  font-size:      9px;
+  font-weight:    700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color:          var(--muted);
+  display:        block;
+  margin-bottom:  4px;
+}
+.ai-pill-value {
+  font-size:      13px;
+  font-weight:    700;
+  font-family:    var(--font-mono);
+  display:        block;
+}
+.pill-ok    { color: #00e5c0; }
+.pill-warn  { color: #f59e0b; }
+.pill-danger{ color: #ef4444; }
+.pill-dim   { color: var(--muted); }
+
+/* Peak hour pill (wider) */
+.ai-peak-row {
+  display:        flex;
+  align-items:    center;
+  gap:            8px;
+  padding:        9px 12px;
+  background:     color-mix(in srgb, var(--accent) 08%, transparent);
+  border:         1px solid rgba(var(--accent-rgb), .18);
+  border-radius:  12px;
+  margin-bottom:  16px;
+}
+.ai-peak-row svg   { color: var(--accent); flex-shrink: 0; }
+.ai-peak-label     { font-size: 11px; color: var(--muted); }
+.ai-peak-value     {
+  font-family:    var(--font-mono);
+  font-size:      14px;
+  font-weight:    700;
+  color:          var(--accent);
+  margin-left:    auto;
+}
+
+/* ───────────────────────────────────────────
+   BURNOUT RISK METER
+─────────────────────────────────────────── */
+.ai-burnout-section {
+  margin-bottom: 16px;
+}
+.ai-burnout-header {
+  display:        flex;
+  justify-content:space-between;
+  align-items:    baseline;
+  margin-bottom:  6px;
+}
+.ai-burnout-title {
+  font-size:      10px;
+  font-weight:    700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color:          var(--muted);
+}
+.ai-burnout-label {
+  font-size:      11px;
+  font-weight:    600;
+}
+.burnout-text-low    { color: #00e5c0; }
+.burnout-text-medium { color: #f59e0b; }
+.burnout-text-high   { color: #ef4444; }
+
+.ai-burnout-track {
+  height:         8px;
+  background:     color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius:  999px;
+  overflow:       hidden;
+  border:         1px solid var(--card-border);
+}
+.ai-burnout-fill {
+  height:         100%;
+  border-radius:  999px;
+  transition:     width .8s cubic-bezier(.34,1.56,.64,1);
+}
+.burnout-low    { background: linear-gradient(90deg, #00e5c0, #00b89f); }
+.burnout-medium { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.burnout-high   { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+
+.ai-burnout-sub {
+  font-size:      10px;
+  color:          var(--muted);
+  margin-top:     4px;
+  text-align:     right;
+}
+
+/* ───────────────────────────────────────────
+   SECTION DIVIDERS
+─────────────────────────────────────────── */
+.ai-section-label {
+  font-size:      9px;
+  font-weight:    700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color:          var(--muted);
+  margin:         14px 0 6px;
+  display:        flex;
+  align-items:    center;
+  gap:            8px;
+}
+.ai-section-label::after {
+  content:        "";
+  flex:           1;
+  height:         1px;
+  background:     var(--card-border);
+}
+
+/* ───────────────────────────────────────────
+   HEATMAP
+─────────────────────────────────────────── */
+.ai-heatmap-wrap {
+  overflow-x:     auto;
+  border-radius:  8px;
+  margin-bottom:  6px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--card-border) transparent;
+}
+#aiHeatmapSvg {
+  display:        block;
+  min-width:      280px;
+}
+
+/* ───────────────────────────────────────────
+   14-DAY BAR CHART
+─────────────────────────────────────────── */
+.ai-barchart-wrap {
+  overflow-x:     auto;
+  border-radius:  8px;
+  margin-bottom:  4px;
+}
+#aiBarChartSvg { display: block; min-width: 280px; }
+
+/* ───────────────────────────────────────────
+   INSIGHTS LIST
+─────────────────────────────────────────── */
+.ai-insights-list {
+  display:        flex;
+  flex-direction: column;
+  gap:            8px;
+}
+
+.ai-insight-row {
+  display:        flex;
+  align-items:    flex-start;
+  gap:            9px;
+  padding:        9px 11px;
+  border-radius:  10px;
+  font-size:      12.5px;
+  line-height:    1.55;
+  border:         1px solid transparent;
+  color:          var(--text);
+}
+.ai-insight-icon {
+  flex-shrink:    0;
+  margin-top:     1px;
+  font-size:      14px;
+}
+
+/* Variants */
+.ai-insight-positive {
+  background: color-mix(in srgb, #00e5c0 06%, transparent);
+  border-color: rgba(0,229,192,.14);
+}
+.ai-insight-warning {
+  background: color-mix(in srgb, #ef4444 06%, transparent);
+  border-color: rgba(239,68,68,.18);
+}
+.ai-insight-caution {
+  background: color-mix(in srgb, #f59e0b 06%, transparent);
+  border-color: rgba(245,158,11,.18);
+}
+.ai-insight-pattern,
+.ai-insight-neutral,
+.ai-insight-peak {
+  background: color-mix(in srgb, var(--accent) 05%, transparent);
+  border-color: rgba(var(--accent-rgb), .12);
+}
+.ai-insight-dim {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ───────────────────────────────────────────
+   RESPONSIVE
+─────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .ai-pills-grid { grid-template-columns: repeat(4, 1fr); }
+}

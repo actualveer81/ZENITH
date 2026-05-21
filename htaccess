@@ -1,0 +1,65 @@
+# Apache: correct Cache-Control headers for Lighthouse audit
+# "Use efficient cache lifetimes" (Est savings ~1,581 KiB)
+
+<IfModule mod_headers.c>
+  # Immutable media — 1 year
+  <FilesMatch "\.(mp3|ogg|wav|flac|aac)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Immutable images / icons — 1 year
+  <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg|ico|woff2|woff|ttf|otf)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # JS / CSS — 1 week + stale-while-revalidate
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
+  </FilesMatch>
+
+  # Manifest — 1 day
+  <FilesMatch "manifest\.json$">
+    Header set Cache-Control "public, max-age=86400, stale-while-revalidate=3600"
+  </FilesMatch>
+
+  # HTML — always revalidate
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# Fallback for servers without mod_headers: use Expires
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType audio/mpeg               "access plus 1 year"
+  ExpiresByType image/png                "access plus 1 year"
+  ExpiresByType image/jpeg               "access plus 1 year"
+  ExpiresByType image/svg+xml            "access plus 1 year"
+  ExpiresByType font/woff2               "access plus 1 year"
+  ExpiresByType application/javascript   "access plus 1 week"
+  ExpiresByType text/css                 "access plus 1 week"
+  ExpiresByType application/manifest+json "access plus 1 day"
+  ExpiresByType text/html                "access plus 0 seconds"
+</IfModule>
+
+# ── Compression: fixes "Document request latency — Est savings 45 KiB" ──
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE application/wasm
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css application/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/json application/manifest+json
+</IfModule>
+
+# Ensure compressed responses are cached separately
+<IfModule mod_headers.c>
+  Header append Vary Accept-Encoding
+</IfModule>

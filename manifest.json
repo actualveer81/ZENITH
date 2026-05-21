@@ -1,0 +1,104 @@
+{
+  "name": "ZENITH — Build Deep. Rise Daily.",
+  "short_name": "ZENITH",
+  "description": "Deep focus, adaptive sessions, and behavioral intelligence — your cognitive performance companion.",
+
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+
+  "background_color": "#060a14",
+  "theme_color": "#0b1120",
+
+  "lang": "en",
+  "dir": "ltr",
+
+  "categories": ["productivity", "lifestyle", "utilities"],
+
+  "icons": [
+    { "src": "/assets/icons/favicon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/icons/favicon-256.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Start Focus Session",
+      "short_name": "Focus",
+      "description": "Jump straight to the timer",
+      "url": "/index.html#focus",
+      "icons": [{ "src": "/assets/icons/favicon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Tasks",
+      "short_name": "Tasks",
+      "description": "View and manage your tasks",
+      "url": "/index.html#tasks",
+      "icons": [{ "src": "/assets/icons/favicon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Stats & Progress",
+      "short_name": "Stats",
+      "description": "Check your focus stats and skill tree",
+      "url": "/index.html#stats",
+      "icons": [{ "src": "/assets/icons/favicon-192.png", "sizes": "192x192" }]
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/home-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Focus Timer — start your journey towards behavioral intelligence"
+    },
+    {
+      "src": "/assets/screenshots/focus-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Focus Timer — start your journey towards behavioral intelligence"
+    },
+    {
+      "src": "/assets/screenshots/task-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tasks — add task & see progress"
+    },
+    {
+      "src": "/assets/screenshots/home-desk.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Focus Timer — start your journey towards behavioral intelligence"
+    },
+    {
+      "src": "/assets/screenshots/focus-desk.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Focus Timer — start your journey towards behavioral intelligence"
+    },
+    {
+      "src": "/assets/screenshots/task-desk.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tasks — add task & see progress"
+    }
+  ],
+
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
+}

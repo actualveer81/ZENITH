@@ -1,0 +1,651 @@
+/* ═══════════════════════════════════════════════════════════════
+   ZENITH — Phase 1 Glass / Mica UI Upgrade
+   Append this entire file at the END of app.css
+   ─────────────────────────────────────────────────────────────
+   Features:
+     · Enhanced glassmorphism — noise texture, layered blur, gradient borders
+     · Windows 11 Mica / Acrylic transparency hooks
+     · macOS vibrancy transparency hooks
+     · Upgraded splash screen — breathing glow ring, quote, progress dots
+     · Electron custom title bar (frameless window)
+     · Electron keyboard shortcut hints in settings
+═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────
+   NEW CSS VARIABLES  (extend :root)
+─────────────────────────────────────────── */
+:root {
+  --glass-noise:      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  --glass-depth-1:    rgba(255,255,255,0.04);
+  --glass-depth-2:    rgba(255,255,255,0.07);
+  --border-glow:      rgba(var(--accent-rgb), 0.25);
+  --mica-bg:          transparent;   /* overridden by .has-mica */
+  --titlebar-height:  40px;
+}
+body.light {
+  --glass-depth-1: rgba(0,0,0,0.025);
+  --glass-depth-2: rgba(0,0,0,0.045);
+  --border-glow:   rgba(var(--accent-rgb), 0.2);
+}
+
+/* ───────────────────────────────────────────
+   MICA / ACRYLIC BODY OVERRIDES
+   When .has-mica is on <body>, the Electron
+   window material shows through transparent areas.
+─────────────────────────────────────────── */
+body.has-mica {
+  background: transparent !important;
+}
+body.has-mica::before {
+  /* soften the OS material with a tinted overlay */
+  background:
+    radial-gradient(55% 40% at 18% 0%,   rgba(var(--accent-rgb),      .09), transparent 65%),
+    radial-gradient(42% 32% at 82% 8%,   rgba(var(--accent-strong-rgb),.07), transparent 65%),
+    rgba(6, 10, 20, 0.42) !important;
+}
+body.has-mica .desktop-sidebar,
+body.has-mica .app-header {
+  background: rgba(6,10,20,0.52) !important;
+  backdrop-filter: blur(40px) saturate(1.8) !important;
+}
+body.has-mica.light {
+  background: transparent !important;
+}
+body.has-mica.light::before {
+  background: rgba(255,251,245,0.38) !important;
+}
+body.has-mica.light .desktop-sidebar,
+body.has-mica.light .app-header {
+  background: rgba(255,251,245,0.52) !important;
+}
+
+/* ───────────────────────────────────────────
+   NOISE TEXTURE OVERLAY (all cards)
+─────────────────────────────────────────── */
+.card::after,
+.desktop-sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--glass-noise);
+  pointer-events: none;
+  opacity: 1;
+  z-index: 0;
+}
+/* ensure card children sit above noise */
+.card > * { position: relative; z-index: 1; }
+
+/* ───────────────────────────────────────────
+   ENHANCED GLASSMORPHISM — CARDS
+─────────────────────────────────────────── */
+.card {
+  position: relative;
+  background:
+    linear-gradient(135deg, var(--glass-depth-2), var(--glass-depth-1)),
+    var(--card) !important;
+  backdrop-filter: blur(24px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
+  border: 1px solid var(--card-border) !important;
+  /* animated gradient border shimmer on hover */
+  transition: box-shadow .3s ease, border-color .3s ease, transform .2s ease;
+}
+.card:hover {
+  border-color: var(--border-glow) !important;
+  box-shadow:
+    var(--shadow),
+    0 0 0 1px rgba(var(--accent-rgb), 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+/* ───────────────────────────────────────────
+   ENHANCED SIDEBAR GLASS
+─────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .desktop-sidebar {
+    background:
+      linear-gradient(180deg, var(--glass-depth-2) 0%, var(--glass-depth-1) 100%),
+      color-mix(in srgb, var(--card) 90%, transparent) !important;
+    backdrop-filter: blur(32px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(1.8) !important;
+    border-right: 1px solid var(--card-border) !important;
+    /* inner right edge highlight */
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.04), 2px 0 20px rgba(0,0,0,0.18);
+  }
+
+  /* animated accent line at top of sidebar */
+  .desktop-sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--accent) 30%,
+      var(--accent-strong) 70%,
+      transparent 100%);
+    opacity: 0.6;
+    border-radius: 0 0 2px 2px;
+    animation: sidebarTopLine 4s ease-in-out infinite;
+  }
+  @keyframes sidebarTopLine {
+    0%,100% { opacity: 0.4; background-position: 0% 0; }
+    50%     { opacity: 0.9; background-position: 100% 0; }
+  }
+
+  /* Nav active pill — stronger glow */
+  .sidebar-nav-btn.active {
+    background: color-mix(in srgb, var(--accent) 14%, transparent) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(var(--accent-rgb), 0.18),
+      0 0 12px rgba(var(--accent-rgb), 0.12) !important;
+  }
+}
+
+/* ───────────────────────────────────────────
+   HEADER GLASS ENHANCEMENT
+─────────────────────────────────────────── */
+.app-header {
+  background:
+    linear-gradient(180deg, var(--glass-depth-1), transparent),
+    color-mix(in srgb, var(--card) 88%, transparent) !important;
+  backdrop-filter: blur(28px) saturate(1.7) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.7) !important;
+  box-shadow: 0 1px 0 var(--card-border), 0 4px 20px rgba(0,0,0,0.15) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ELECTRON CUSTOM TITLE BAR
+═══════════════════════════════════════════════════════════════ */
+body.is-electron .zenith-titlebar {
+  display: flex !important;
+}
+
+.zenith-titlebar {
+  display:         none;        /* hidden on web; shown in Electron via .is-electron */
+  position:        fixed;
+  top:             0; left: 0; right: 0;
+  height:          var(--titlebar-height);
+  z-index:         9001;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0 12px 0 16px;
+  -webkit-app-region: drag;     /* entire bar is draggable */
+  user-select:     none;
+  background: transparent;
+}
+
+/* When sidebar visible, shift brand label right */
+@media (min-width: 1024px) {
+  .zenith-titlebar {
+    left: 230px;
+  }
+}
+
+.titlebar-drag-area {
+  flex: 1;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+.titlebar-brand {
+  font-family:    var(--font-display);
+  font-size:      13px;
+  font-weight:    700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-app-region: drag;
+  white-space: nowrap;
+}
+
+/* Window chrome buttons (Windows/Linux — macOS uses native traffic lights) */
+.titlebar-controls {
+  display:         flex;
+  gap:             2px;
+  align-items:     center;
+  -webkit-app-region: no-drag;
+}
+body.is-mac .titlebar-controls {
+  display: none;   /* macOS uses native traffic lights */
+}
+
+.titlebar-btn {
+  width:           38px;
+  height:          var(--titlebar-height);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  background:      none;
+  border:          none;
+  border-radius:   0;
+  color:           var(--muted);
+  cursor:          pointer;
+  transition:      background .15s, color .15s;
+  box-shadow:      none;
+  padding:         0;
+  -webkit-app-region: no-drag;
+}
+.titlebar-btn svg { width: 11px; height: 11px; stroke-width: 1.5; }
+.titlebar-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+.titlebar-btn.close:hover { background: #e81123; color: #fff; }
+body.light .titlebar-btn:hover { background: rgba(0,0,0,0.06); }
+body.light .titlebar-btn.close:hover { background: #e81123; color: #fff; }
+
+/* Push main content below titlebar in Electron on mobile header */
+body.is-electron .app-header {
+  top: var(--titlebar-height);
+}
+body.is-electron .app {
+  padding-top: calc(var(--titlebar-height) + clamp(84px,10vh,90px));
+}
+@media (min-width: 1024px) {
+  body.is-electron .app {
+    padding-top: calc(var(--titlebar-height) + 20px);
+  }
+  body.is-electron .desktop-sidebar {
+    padding-top: calc(var(--titlebar-height) + 10px);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UPGRADED SPLASH SCREEN
+═══════════════════════════════════════════════════════════════ */
+#app-splash {
+  position:       fixed;
+  inset:          0;
+  z-index:        9999;
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  justify-content:center;
+  gap:            0;
+  overflow:       hidden;
+
+  /* deep radial backdrop */
+  background:
+    radial-gradient(60% 60% at 50% 42%,
+      rgba(var(--accent-rgb),       .13) 0%,
+      rgba(var(--accent-strong-rgb),.08) 50%,
+      transparent 100%),
+    var(--bg);
+}
+
+/* Large ambient aura behind everything */
+.splash-aura {
+  position:      absolute;
+  width:         600px;
+  height:        600px;
+  border-radius: 50%;
+  background:    radial-gradient(circle,
+    rgba(var(--accent-rgb),       .16),
+    rgba(var(--accent-strong-rgb),.08) 45%,
+    transparent 72%);
+  filter:        blur(60px);
+  animation:     splashAuraPulse 3.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes splashAuraPulse {
+  0%,100% { transform: scale(1);    opacity: .8; }
+  50%     { transform: scale(1.18); opacity: 1;  }
+}
+
+/* Outer breathing glow ring */
+.splash-glow-ring {
+  position:      absolute;
+  width:         240px;
+  height:        240px;
+  border-radius: 50%;
+  border:        1.5px solid rgba(var(--accent-rgb), .3);
+  box-shadow:
+    0 0 0   8px rgba(var(--accent-rgb), .06),
+    0 0 0  24px rgba(var(--accent-rgb), .03),
+    inset 0 0 0 2px rgba(var(--accent-rgb), .05);
+  animation:     splashRingBreathe 2.8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes splashRingBreathe {
+  0%,100% { transform: scale(1);    opacity: .6; }
+  50%     { transform: scale(1.06); opacity: 1;  }
+}
+
+/* Logo wrapper */
+.splash-logo-wrap {
+  position:      relative;
+  width:         100px;
+  height:        100px;
+  margin-bottom: 22px;
+  margin-top:    -6px;
+}
+
+/* Inner ring (rotates) */
+.splash-logo-ring {
+  position:      absolute;
+  inset:         -12px;
+  border-radius: 50%;
+  border:        1px solid transparent;
+  border-top-color:   rgba(var(--accent-rgb), .7);
+  border-right-color: rgba(var(--accent-strong-rgb), .4);
+  animation:     splashLogoSpin 2.2s linear infinite;
+}
+@keyframes splashLogoSpin {
+  to { transform: rotate(360deg); }
+}
+
+.splash-logo-img {
+  width:         100px;
+  height:        100px;
+  object-fit:    contain;
+  position:      relative;
+  z-index:       1;
+  border-radius: 50%;
+  filter:        drop-shadow(0 0 18px rgba(var(--accent-rgb), .55))
+                 drop-shadow(0 0 40px rgba(var(--accent-rgb), .25));
+  animation:     splashLogoFloat 2.4s ease-in-out infinite alternate;
+}
+@keyframes splashLogoFloat {
+  from { transform: translateY(0);    }
+  to   { transform: translateY(-7px); }
+}
+
+/* ZENITH wordmark */
+.splash-wordmark {
+  font-family:    var(--font-display);
+  font-size:      clamp(28px, 6vw, 38px);
+  font-weight:    800;
+  letter-spacing: .18em;
+  margin-bottom:  4px;
+  background: linear-gradient(135deg, var(--text) 20%, var(--accent) 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeUp .7s cubic-bezier(.16,1,.3,1) both;
+}
+
+/* Tagline */
+.splash-tagline {
+  font-family:    var(--font-body);
+  font-size:      11px;
+  font-weight:    600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color:          var(--muted);
+  margin-bottom:  28px;
+  animation:      fadeUp .9s cubic-bezier(.16,1,.3,1) .1s both;
+}
+
+/* Motivational quote */
+.splash-quote {
+  font-family:    var(--font-body);
+  font-size:      clamp(12px,2.5vw,14px);
+  font-style:     italic;
+  color:          var(--muted);
+  max-width:      280px;
+  text-align:     center;
+  line-height:    1.65;
+  min-height:     44px;
+  margin-bottom:  28px;
+  animation:      fadeUp 1s cubic-bezier(.16,1,.3,1) .2s both;
+  opacity:        .82;
+}
+
+/* Progress dots */
+.splash-dots {
+  display:        flex;
+  gap:            7px;
+  animation:      fadeUp .9s .35s both;
+}
+.splash-dots span {
+  width:          6px;
+  height:         6px;
+  border-radius:  50%;
+  background:     var(--accent);
+  opacity:        .3;
+  animation:      splashDot 1.4s ease-in-out infinite;
+}
+.splash-dots span:nth-child(1) { animation-delay: 0s;    }
+.splash-dots span:nth-child(2) { animation-delay: .2s;   }
+.splash-dots span:nth-child(3) { animation-delay: .4s;   }
+@keyframes splashDot {
+  0%,80%,100% { opacity: .3; transform: scale(1);    }
+  40%         { opacity:  1; transform: scale(1.35); }
+}
+
+/* Fade-out triggered by JS (.splash-done) */
+#app-splash {
+  transition: opacity .5s cubic-bezier(.4,0,.2,1), visibility .5s;
+}
+#app-splash.splash-done {
+  opacity:    0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ELECTRON KEYBOARD SHORTCUT HINTS
+   Add these rows to your .kbd-grid in Settings
+═══════════════════════════════════════════════════════════════ */
+.kbd-electron-section {
+  margin-top:    14px;
+  padding-top:   14px;
+  border-top:    1px solid var(--card-border);
+}
+.kbd-electron-label {
+  font-size:     10px;
+  font-weight:   700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:         var(--muted);
+  margin-bottom: 8px;
+  display:       block;
+}
+/* Only show in Electron */
+.kbd-electron-section { display: none; }
+body.is-electron .kbd-electron-section { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════
+   GRADIENT BORDER ANIMATION (focus input / active card)
+═══════════════════════════════════════════════════════════════ */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.card-accent-border {
+  position: relative;
+}
+.card-accent-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    var(--accent) 20%,
+    var(--accent-strong) 40%,
+    transparent 60%
+  );
+  animation: borderSpin 3s linear infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.card-accent-border:hover::before,
+.card-accent-border:focus-within::before {
+  opacity: 0.6;
+}
+@keyframes borderSpin {
+  to { --angle: 360deg; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TRAY POPUP NOTIFICATION TOAST  (shown when tray-triggered)
+═══════════════════════════════════════════════════════════════ */
+.tray-toast {
+  position:      fixed;
+  top:           calc(var(--titlebar-height, 0px) + 8px);
+  right:         12px;
+  z-index:       9500;
+  background:
+    linear-gradient(135deg, var(--glass-depth-2), var(--glass-depth-1)),
+    var(--card);
+  backdrop-filter: blur(24px);
+  border:        1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  padding:       10px 16px;
+  font-size:     .84rem;
+  font-family:   var(--font-body);
+  color:         var(--text);
+  box-shadow:    var(--shadow), 0 0 0 1px rgba(var(--accent-rgb),.1);
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+  max-width:     300px;
+  animation:     trayToastIn .35s cubic-bezier(.16,1,.3,1) both;
+  pointer-events:none;
+}
+.tray-toast.out {
+  animation: trayToastOut .3s ease forwards;
+}
+@keyframes trayToastIn {
+  from { opacity: 0; transform: translateY(-10px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes trayToastOut {
+  to   { opacity: 0; transform: translateY(-6px) scale(.97); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPLASH SCREEN — RESPONSIVE BREAKPOINTS
+   Fixes hardcoded sizes that caused overflow on mobile
+   and an underwhelming appearance on large screens.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Mobile  ≤ 480px ── */
+@media (max-width: 480px) {
+  .splash-aura {
+    width:  310px;
+    height: 310px;
+    filter: blur(40px);
+  }
+  .splash-glow-ring {
+    width:  280px;
+    height: 280px;
+  }
+  .splash-logo-wrap {
+    width:         72px;
+    height:        72px;
+    margin-bottom: 14px;
+    margin-top:    -4px;
+  }
+  .splash-logo-ring {
+    inset: -8px;
+  }
+  .splash-logo-img {
+    width:  72px;
+    height: 72px;
+  }
+  .splash-wordmark {
+    font-size: clamp(22px, 7vw, 28px);
+  }
+  .splash-tagline {
+    margin-bottom: 16px;
+    font-size: 9px;
+  }
+  .splash-quote {
+    font-size:  11px;
+    max-width:  220px;
+    min-height: 36px;
+    margin-bottom: 20px;
+  }
+  .splash-dots span {
+    width:  5px;
+    height: 5px;
+  }
+}
+
+/* ── Tablet  481px – 1023px ── */
+@media (min-width: 481px) and (max-width: 1023px) {
+  .splash-aura {
+    width:  600px;
+    height: 600px;
+    filter: blur(52px);
+  }
+  .splash-glow-ring {
+    width:  360px;
+    height: 360px;
+  }
+  .splash-logo-wrap {
+    width:         90px;
+    height:        90px;
+    margin-bottom: 20px;
+  }
+  .splash-logo-ring {
+    inset: -10px;
+  }
+  .splash-logo-img {
+    width:  90px;
+    height: 90px;
+  }
+  .splash-wordmark {
+    font-size: clamp(28px, 5vw, 34px);
+  }
+  .splash-quote {
+    max-width:  280px;
+    font-size:  13px;
+    min-height: 42px;
+  }
+}
+
+/* ── Desktop  1024px+ ── */
+@media (min-width: 1024px) {
+  .splash-aura {
+    width:  700px;
+    height: 700px;
+    filter: blur(72px);
+  }
+  .splash-glow-ring {
+    width:  480px;
+    height: 480px;
+  }
+  .splash-logo-wrap {
+    width:         120px;
+    height:        120px;
+    margin-bottom: 26px;
+    margin-top:    -8px;
+  }
+  .splash-logo-ring {
+    inset: -14px;
+  }
+  .splash-logo-img {
+    width:  120px;
+    height: 120px;
+    filter:
+      drop-shadow(0 0 22px rgba(79,156,249,.6))
+      drop-shadow(0 0 50px rgba(79,156,249,.28));
+  }
+  .splash-wordmark {
+    font-size: clamp(34px, 4vw, 44px);
+    margin-bottom: 6px;
+  }
+  .splash-tagline {
+    margin-bottom: 34px;
+    font-size: 12px;
+  }
+  .splash-quote {
+    max-width:  340px;
+    font-size:  clamp(13px, 1.5vw, 15px);
+    min-height: 52px;
+    margin-bottom: 34px;
+  }
+  .splash-dots {
+    gap: 9px;
+  }
+  .splash-dots span {
+    width:  7px;
+    height: 7px;
+  }
+}
